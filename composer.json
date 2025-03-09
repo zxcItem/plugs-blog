@@ -1,0 +1,44 @@
+{
+    "type": "think-admin-plugin",
+    "name": "xiaochao/plugs-blog",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "叶落无痕",
+            "email": "zxcaile@foxmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "plugin\\blog\\": "src"
+        }
+    },
+    "extra": {
+        "config": {
+            "type": "module",
+            "name": "博客内容管理",
+            "cover": "layui-icon layui-icon-release",
+            "description": "博客内容管理 功能开发中"
+        },
+        "think": {
+            "services": [
+                "plugin\\blog\\Service"
+            ]
+        },
+        "plugin": {
+            "copy": {
+                "stc/database": "database/migrations"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "zoujingli/think-install": true
+        }
+    }
+}
