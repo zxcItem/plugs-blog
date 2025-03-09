@@ -1,0 +1,40 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form-pane layui-tab layui-form layui-card">
+    <div class="layui-card-body padding-left-40">
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">标签信息</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs2 text-center padding-top-15">
+                    <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
+                    <script>$('[name=cover]').uploadOneImage();</script>
+                </div>
+                <div class="layui-col-xs10">
+                    <label class="layui-form-label color-green">标签名称</label>
+                    <div class="layui-input-block">
+                        <input name="title" value="{$vo.title|default=''}" placeholder="请输入标签名称" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs10">
+                    <label class="layui-form-label color-green">标签标识</label>
+                    <div class="layui-input-block">
+                        <input name="sign" value="{$vo.sign|default=''}" placeholder="请输入标签标识" required class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label color-green">标签描述</label>
+                <div class="layui-input-block">
+                    <textarea name="describe" placeholder="请输入标签描述" class="layui-textarea">{$vo.describe|default=""}</textarea>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>

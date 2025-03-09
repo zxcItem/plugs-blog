@@ -1,0 +1,62 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form-pane layui-tab layui-form layui-card">
+    <div class="layui-card-body padding-left-40">
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">导航信息</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="layui-form-label color-green">导航标题</label>
+                    <div class="layui-input-block">
+                        <input name="title" value="{$vo.title|default=''}" placeholder="请输入标签名称" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs8">
+                    <label class="layui-form-label color-green">跳转规则</label>
+                    <div class="layui-input-block">
+                        <input name="url" value="{$vo.url|default='/'}" placeholder="请输入跳转规则" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs4">
+                    <div class="inline-block margin-left-5">
+                        <select class="layui-select" name="type[]" lay-filter="TypeSelect" data-item-rule>
+                            {foreach $rules as $key=>$rule}
+                            <option value="{$key}" data-node="{$rule.node|default=''}">{$key} - {$rule.name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="help-block">若要跳转页面，请选择对应的数据或填写跳转的 URL 地址，不跳转请填写 “#” 号占位。</div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>
+        $(function () {
+            layui.form.on('select(TypeSelect)', function (data) {
+                // 直接通过 name="url" 获取跳转规则的输入框
+                var input = $('input[name="url"]');
+                var option = data.elem.options[data.elem.options.selectedIndex];
+                var title = option.innerText.split(' - ').pop(), node = option.dataset.node;
+                window.setItemValue = function (id, name) {
+                    input.val(data.value + '#' + (id || '0') + '#' + (name || title));
+                };
+                this.openModel = function (url) {
+                    return $.form.modal(url, {}, title, null, true, null, '840px', '5%');
+                };
+                if (data.value === '/') return input.val('/');
+                if (data.value === 'LK') return /^https?:\/\//.test(input.val()) || input.val('#').focus();
+                if (node.length > 0) return this.openModel('{:url("@URLTEMP")}'.replace('URLTEMP', node));
+                return window.setItemValue();
+            });
+
+        })
+    </script>
+</form>
+

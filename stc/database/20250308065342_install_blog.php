@@ -28,7 +28,7 @@ class InstallBlog extends Migrator
      */
     public function change()
     {
-        $this->_create_plugin_blog_tag();
+        $this->_create_plugin_blog_mark();
         $this->_create_plugin_blog_series();
         $this->_create_plugin_blog_content();
         $this->_create_plugin_blog_navigation();
@@ -36,20 +36,21 @@ class InstallBlog extends Migrator
 
     /**
      * 标签信息
-     * @class PluginBlogTag
-     * @table plugin_blog_tag
+     * @class PluginBlogMark
+     * @table plugin_blog_mark
      * @return void
      */
-    private function _create_plugin_blog_tag()
+    private function _create_plugin_blog_mark()
     {
         // 创建数据表对象
-        $table = $this->table('plugin_blog_tag', [
+        $table = $this->table('plugin_blog_mark', [
             'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '标签信息',
         ]);
         PhinxExtend::upgrade($table, [
-            ['cover', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '标签封面']],
+            ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '标签封面']],
             ['title', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '标签名称']],
             ['sign', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '标签标识']],
+            ['describe', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '描述']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
@@ -71,9 +72,10 @@ class InstallBlog extends Migrator
             'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '集合信息',
         ]);
         PhinxExtend::upgrade($table, [
-            ['cover', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '集合封面']],
+            ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '集合封面']],
             ['title', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '集合名称']],
             ['sign', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '集合标识']],
+            ['describe', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '描述']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
@@ -96,7 +98,7 @@ class InstallBlog extends Migrator
         ]);
         PhinxExtend::upgrade($table, [
             ['title', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '导航名称']],
-            ['url', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '导航链接']],
+            ['url', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '导航链接']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
@@ -118,22 +120,24 @@ class InstallBlog extends Migrator
             'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '内容信息',
         ]);
         PhinxExtend::upgrade($table, [
-            ['cover', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '封面']],
-            ['title', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '标题']],
+            ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '封面']],
+            ['title', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '标题']],
             ['describe', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '描述']],
+            ['code', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '编号']],
             ['content', 'text', ['default' => NULL, 'null' => true, 'comment' => '内容']],
-            ['series_id', 'integer', ['limit' => 10,'default' => NULL, 'null' => true, 'comment' => '所属集合']],
-            ['tags', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '标签']],
+            ['series', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '所属集合']],
+            ['mark', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '标签']],
             ['page_view', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '浏览量']],
             ['virtual_view', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟浏览量']],
             ['like_count', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '点赞量']],
             ['virtual_like', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟点赞量']],
+            ['recommend', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '推荐']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['update_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '更新时间']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [
-            'series_id','tags','page_view','virtual_view','like_count','virtual_like','sort','status','update_at'
+            'series_id','mark','page_view','virtual_view','like_count','virtual_like','sort','status','update_at'
         ], true);
     }
 }

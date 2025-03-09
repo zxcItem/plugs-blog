@@ -46,14 +46,15 @@ class Service extends Plugin
             [
                 'name' => '参数配置',
                 'subs' => [
-                    ['name' => '标签信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.config/index"],
-                    ['name' => '集合信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.config/index"],
+                    ['name' => '标签信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.mark/index"],
+                    ['name' => '集合信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.series/index"],
+                    ['name' => '首页导航管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.nav/index"],
                 ],
             ],
             [
-                'name' => '内容管理',
+                'name' => '文章管理',
                 'subs' => [
-                    ['name' => '内容素材频道', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/channel.item/index"],
+                    ['name' => '文章内容管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/content.item/index"],
                 ],
             ]
         ];

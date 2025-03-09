@@ -12,4 +12,8 @@ namespace plugin\blog\model;
 class PluginBlogSeries extends Abs
 {
 
+    public static function get()
+    {
+        return self::mk()->column('title','sign');
+    }
 }

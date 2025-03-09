@@ -1,0 +1,128 @@
+{extend name="main"}
+
+{block name='content'}
+<div class="layui-clear layui-form-pane nowrap padding-bottom-30 layui-row layui-col-space15">
+    <div class="layui-col-xs8">
+        <form action="{:sysuri()}" class="layui-form-pane layui-card layui-form" data-auto="true" method="post">
+            <div class="layui-card-body">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-xs1 text-center padding-top-15">
+                        <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
+                        <script>$('[name=cover]').uploadOneImage();</script>
+                    </div>
+                    <div class="layui-col-xs11">
+                        <label class="layui-form-label color-green">文章标题</label>
+                        <div class="layui-input-block">
+                            <input name="title" value="{$vo.title|default=''}" placeholder="请输入内容标题" required class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-xs11">
+                        <label class="layui-form-label color-green">文章描述</label>
+                        <div class="layui-input-block">
+                            <input name="describe" value="{$vo.describe|default=''}" placeholder="请输入内容描述" required class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-xs6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label color-green">所属集合</label>
+                            <div class="layui-input-block">
+                                <select class="layui-select" name="series">
+                                    <option selected value="">------------无-----------</option>
+                                    {foreach $serice as $k=>$v}
+                                    {if isset($vo.series) and $vo.series eq $k}
+                                    <option selected value="{$k}">{$v}</option>
+                                    {else}
+                                    <option value="{$k}">{$v}</option>
+                                    {/if}{/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-form-item"  pane="">
+                                <label class="layui-form-label color-green">文章标签</label>
+                                <div class="layui-input-block">
+                                    {foreach $marks as $tag}{if isset($vo.mark) && is_array($vo.mark) && in_array($tag.sign, $vo.mark)}
+                                    <label class="think-checkbox notselect"><input checked lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
+                                    {else}
+                                    <label class="think-checkbox notselect"><input lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
+                                    {/if}{/foreach}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" pane="">
+                            <label class="layui-form-label color-green">推荐状态</label>
+                            <div class="layui-input-block" >
+                                {empty name='vo.recommend'}{assign name='vo.recommend' value='0'}{/empty}
+                                {foreach ['不推荐','推荐'] as $key => $value}
+                                {if isset($vo.recommend) && $vo.recommend eq $key}
+                                <input type="radio" name="recommend" value="{$key}" title="{$value}" checked="">
+                                {else}
+                                <input type="radio" name="recommend" value="{$key}" title="{$value}">
+                                {/if}
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label color-green">浏览量</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="page_view" value="{$vo.page_view|default=0}" placeholder="请输入浏览量" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label color-green">虚拟浏览量</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="virtual_view" value="{$vo.virtual_view|default=0}" placeholder="请输入虚拟浏览量" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label color-green">点赞量</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="like_count" value="{$vo.like_count|default=0}" placeholder="请输入点赞量" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label color-green">虚拟点赞量</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="virtual_like" value="{$vo.virtual_like|default=0}" placeholder="请输入虚拟点赞量" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label color-green">文章详情</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-hide" name="content" placeholder="请输入文章内容">{$vo.content|default=''}</textarea>
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+                {notempty name='vo.id'}<input name='id' type='hidden' value='{$vo.id}'>{/notempty}
+
+                <div class="layui-form-item text-center">
+                    <button class="layui-btn" type="submit">保存数据</button>
+                    <button class="layui-btn layui-btn-danger" data-history-back data-confirm="确定要取消编辑吗？" type='button'>取消编辑</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="layui-col-xs4">
+        <div class="layui-card-body" style="height: 850px;background-color: #ffffff">
+            <div class="layui-row layui-col-space15">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    require(['ckeditor'], function () {
+        window.createEditor('[name=content]', {height: 500})
+    });
+</script>
+{/block}
