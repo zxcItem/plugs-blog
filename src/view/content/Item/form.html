@@ -1,5 +1,131 @@
 {extend name="main"}
 
+{block name="style"}
+<style>
+    /* 代码块样式 */
+    .preview-content pre {
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+        overflow-x: auto;
+        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .preview-content code {
+        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        background-color: #f5f5f5;
+        padding: 2px 4px;
+        border-radius: 3px;
+        color: #c7254e;
+    }
+
+    .preview-content pre code {
+        padding: 0;
+        color: inherit;
+        background-color: transparent;
+        border-radius: 0;
+        display: block;
+        white-space: pre;
+        word-break: normal;
+    }
+
+    /* 图片样式 */
+    .preview-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 10px 0;
+    }
+
+    /* 表格样式 */
+    .preview-content table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 15px 0;
+    }
+
+    .preview-content table, .preview-content th, .preview-content td {
+        border: 1px solid #ddd;
+    }
+
+    .preview-content th, .preview-content td {
+        padding: 8px;
+        text-align: left;
+    }
+
+    .preview-content th {
+        background-color: #f2f2f2;
+    }
+
+    /* 预览区域基础样式 */
+    .preview-content {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #333;
+        max-height: 650px;
+        overflow-y: auto;
+        word-break: break-all;
+        white-space: normal;
+    }
+
+    /* 标题样式 */
+    .preview-content h1, .preview-content h2, .preview-content h3,
+    .preview-content h4, .preview-content h5, .preview-content h6 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        line-height: 1.2;
+    }
+
+    /* 段落样式 */
+    .preview-content p {
+        margin-bottom: 15px;
+    }
+
+    /* 列表样式 */
+    .preview-content ul, .preview-content ol {
+        margin-bottom: 15px;
+        padding-left: 20px;
+    }
+
+    /* 引用样式 */
+    .preview-content blockquote {
+        padding: 10px 20px;
+        margin: 0 0 20px;
+        border-left: 5px solid #eee;
+        color: #666;
+    }
+
+    /* 预览区域容器样式 */
+    .preview-container {
+        height: 850px;
+        background-color: #ffffff;
+    }
+
+    .preview-card-body {
+        padding: 15px;
+    }
+
+    .preview-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        word-break: break-all;
+        white-space: normal;
+    }
+
+    .preview-describe {
+        color: #999;
+        margin-bottom: 15px;
+        word-break: break-all;
+        white-space: normal;
+    }
+</style>
+{/block}
 {block name='content'}
 <div class="layui-clear layui-form-pane nowrap padding-bottom-30 layui-row layui-col-space15">
     <div class="layui-col-xs8">
@@ -111,9 +237,20 @@
         </form>
     </div>
     <div class="layui-col-xs4">
-        <div class="layui-card-body" style="height: 850px;background-color: #ffffff">
+        <div class="layui-card-body preview-container">
             <div class="layui-row layui-col-space15">
-
+                <div class="layui-col-xs12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            <span class="color-green">文章预览</span>
+                        </div>
+                        <div class="layui-card-body preview-card-body">
+                            <div class="preview-title" id="preview-title"></div>
+                            <div class="preview-describe" id="preview-describe"></div>
+                            <div class="preview-content" id="preview-content"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -122,7 +259,56 @@
 
 <script>
     require(['ckeditor'], function () {
-        window.createEditor('[name=content]', {height: 500})
+        // 初始化编辑器
+        var editor = window.createEditor('[name=content]', {height: 500});
+
+        // 监听编辑器内容变化
+        if(editor) {
+            editor.on('change', function() {
+                // 更新预览内容
+                document.getElementById('preview-content').innerHTML = editor.getData();
+
+                // 处理代码块的语法高亮
+                handleCodeBlocks();
+            });
+
+            // 初始加载内容
+            setTimeout(function() {
+                document.getElementById('preview-content').innerHTML = editor.getData();
+                // 处理代码块的语法高亮
+                handleCodeBlocks();
+            }, 1000);
+        }
+
+        // 监听标题和描述变化
+        document.querySelector('[name=title]').addEventListener('input', function() {
+            document.getElementById('preview-title').innerText = this.value;
+        });
+
+        document.querySelector('[name=describe]').addEventListener('input', function() {
+            document.getElementById('preview-describe').innerText = this.value;
+        });
+
+        // 初始加载标题和描述
+        document.getElementById('preview-title').innerText = document.querySelector('[name=title]').value;
+        document.getElementById('preview-describe').innerText = document.querySelector('[name=describe]').value;
+
+        // 处理代码块函数
+        function handleCodeBlocks() {
+            // 确保预览区域中的代码块正确显示
+            var preElements = document.querySelectorAll('#preview-content pre');
+            preElements.forEach(function(preElement) {
+                // 确保代码块内的代码有正确的样式
+                if (!preElement.querySelector('code')) {
+                    var codeContent = preElement.innerHTML;
+                    preElement.innerHTML = '<code>' + codeContent + '</code>';
+                }
+
+                // 防止代码块内容溢出
+                preElement.style.overflow = 'auto';
+                preElement.style.maxWidth = '100%';
+            });
+        }
     });
 </script>
 {/block}
