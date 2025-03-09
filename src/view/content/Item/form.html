@@ -195,25 +195,25 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label color-green">浏览量</label>
                             <div class="layui-input-block">
-                                <input type="number" name="page_view" value="{$vo.page_view|default=0}" placeholder="请输入浏览量" class="layui-input">
+                                <input type="number" name="views" value="{$vo.views|default=0}" readonly placeholder="请输入浏览量" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label color-green">虚拟浏览量</label>
                             <div class="layui-input-block">
-                                <input type="number" name="virtual_view" value="{$vo.virtual_view|default=0}" placeholder="请输入虚拟浏览量" class="layui-input">
+                                <input type="number" name="virtual_view" value="{$vo.virtual_view|default=mt_rand(3000,5000)}" readonly placeholder="请输入虚拟浏览量" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label color-green">点赞量</label>
                             <div class="layui-input-block">
-                                <input type="number" name="like_count" value="{$vo.like_count|default=0}" placeholder="请输入点赞量" class="layui-input">
+                                <input type="number" name="likes" value="{$vo.likes|default=0}" readonly placeholder="请输入点赞量" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label color-green">虚拟点赞量</label>
                             <div class="layui-input-block">
-                                <input type="number" name="virtual_like" value="{$vo.virtual_like|default=0}" placeholder="请输入虚拟点赞量" class="layui-input">
+                                <input type="number" name="virtual_like" value="{$vo.virtual_like|default=mt_rand(2000,3000)}" readonly placeholder="请输入虚拟点赞量" class="layui-input">
                             </div>
                         </div>
                     </div>

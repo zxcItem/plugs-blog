@@ -127,9 +127,9 @@ class InstallBlog extends Migrator
             ['content', 'text', ['default' => NULL, 'null' => true, 'comment' => '内容']],
             ['series', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '所属集合']],
             ['mark', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '标签']],
-            ['page_view', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '浏览量']],
+            ['views', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '浏览量']],
             ['virtual_view', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟浏览量']],
-            ['like_count', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '点赞量']],
+            ['likes', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '点赞量']],
             ['virtual_like', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟点赞量']],
             ['recommend', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '推荐']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
@@ -137,7 +137,7 @@ class InstallBlog extends Migrator
             ['update_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '更新时间']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [
-            'series','mark','page_view','virtual_view','like_count','virtual_like','sort','status','update_at'
+            'series','mark','views','virtual_view','likes','virtual_like','sort','status','update_at'
         ], true);
     }
 }

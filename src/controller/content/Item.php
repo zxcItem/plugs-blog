@@ -91,6 +91,8 @@ class Item extends Controller
             $data['mark'] = str2arr($data['mark'] ?? '');
         } else {
             $data['mark'] = arr2str($data['mark'] ?? []);
+            if (empty($data['views'])) $data['views'] = $data['virtual_view'];
+            if (empty($data['likes'])) $data['likes'] = $data['virtual_like'];
         }
     }
 
