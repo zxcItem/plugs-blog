@@ -137,7 +137,7 @@ class InstallBlog extends Migrator
             ['update_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '更新时间']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [
-            'series_id','mark','page_view','virtual_view','like_count','virtual_like','sort','status','update_at'
+            'series','mark','page_view','virtual_view','like_count','virtual_like','sort','status','update_at'
         ], true);
     }
 }
