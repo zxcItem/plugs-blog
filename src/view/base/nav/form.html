@@ -13,7 +13,7 @@
                 <div class="layui-col-xs8">
                     <label class="layui-form-label color-green">跳转规则</label>
                     <div class="layui-input-block">
-                        <input name="url" value="{$vo.url|default='/'}" placeholder="请输入跳转规则" required class="layui-input">
+                        <input name="url" value="{$vo.url|default='#'}" placeholder="请输入跳转规则" required class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-xs4">
@@ -50,7 +50,7 @@
                 this.openModel = function (url) {
                     return $.form.modal(url, {}, title, null, true, null, '840px', '5%');
                 };
-                if (data.value === '/') return input.val('/');
+                if (data.value === '#') return input.val('#');
                 if (data.value === 'LK') return /^https?:\/\//.test(input.val()) || input.val('#').focus();
                 if (node.length > 0) return this.openModel('{:url("@URLTEMP")}'.replace('URLTEMP', node));
                 return window.setItemValue();

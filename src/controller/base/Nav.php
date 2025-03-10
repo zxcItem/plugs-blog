@@ -21,7 +21,7 @@ class Nav extends Controller
      * @var string[]
      */
     protected $rules = [
-        '/'  => ['name' => '不跳转'],
+        '#'  => ['name' => '不跳转'],
         'LK' => ['name' => '自定义链接'],
         'JH' => ['name' => '集合详情页','node' => 'plugin-blog/base.series/select'],
         'WZ' => ['name' => '文章详情页', 'node' => 'plugin-blog/content.item/select'],

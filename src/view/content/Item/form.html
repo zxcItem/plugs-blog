@@ -1,6 +1,7 @@
 {extend name="main"}
 
 {block name="style"}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css">
 <style>
     /* 代码块样式 */
     .preview-content pre {
@@ -132,17 +133,17 @@
         <form action="{:sysuri()}" class="layui-form-pane layui-card layui-form" data-auto="true" method="post">
             <div class="layui-card-body">
                 <div class="layui-row layui-col-space15">
-                    <div class="layui-col-xs1 text-center padding-top-15">
+                    <div class="layui-col-xs2 text-center padding-top-15">
                         <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
                         <script>$('[name=cover]').uploadOneImage();</script>
                     </div>
-                    <div class="layui-col-xs11">
+                    <div class="layui-col-xs10">
                         <label class="layui-form-label color-green">文章标题</label>
                         <div class="layui-input-block">
                             <input name="title" value="{$vo.title|default=''}" placeholder="请输入内容标题" required class="layui-input">
                         </div>
                     </div>
-                    <div class="layui-col-xs11">
+                    <div class="layui-col-xs10">
                         <label class="layui-form-label color-green">文章描述</label>
                         <div class="layui-input-block">
                             <input name="describe" value="{$vo.describe|default=''}" placeholder="请输入内容描述" required class="layui-input">
@@ -304,10 +305,57 @@
                     preElement.innerHTML = '<code>' + codeContent + '</code>';
                 }
 
+                // 应用语法高亮
+                var codeElement = preElement.querySelector('code');
+                if (codeElement) {
+                    // 尝试从class中获取语言
+                    var langClass = Array.from(codeElement.classList).find(function(cls) {
+                        return cls.startsWith('language-');
+                    });
+                    
+                    var language = langClass ? langClass.replace('language-', '') : '';
+                    
+                    // 应用高亮
+                    if (window.hljs) {
+                        if (language) {
+                            hljs.highlightElement(codeElement);
+                        } else {
+                            hljs.highlightAuto(codeElement);
+                        }
+                    }
+                }
+
                 // 防止代码块内容溢出
                 preElement.style.overflow = 'auto';
                 preElement.style.maxWidth = '100%';
             });
+        }
+        
+        // 动态加载highlight.js
+        if (!window.hljs) {
+            var script = document.createElement('script');
+            // 使用不同的CDN或备用链接
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js';
+            // 添加错误处理
+            script.onerror = function() {
+                // 如果CDN加载失败，尝试使用另一个CDN
+                console.log('Failed to load highlight.js from primary CDN, trying alternative...');
+                var backupScript = document.createElement('script');
+                backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js';
+                backupScript.onload = function() {
+                    if (editor) {
+                        handleCodeBlocks();
+                    }
+                };
+                document.head.appendChild(backupScript);
+            };
+            script.onload = function() {
+                // 加载完成后重新处理代码块
+                if (editor) {
+                    handleCodeBlocks();
+                }
+            };
+            document.head.appendChild(script);
         }
     });
 </script>
