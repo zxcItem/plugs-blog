@@ -16,4 +16,14 @@ class PluginBlogSeries extends Abs
     {
         return self::mk()->column('title','sign');
     }
+
+    public function news()
+    {
+        return $this->belongsTo(PluginBlogContent::class,'sign','series');
+    }
+
+    public function list()
+    {
+        return $this->hasMany(PluginBlogContent::class,'series','sign');
+    }
 }

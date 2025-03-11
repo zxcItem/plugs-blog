@@ -4,7 +4,7 @@ declare (strict_types=1);
 
 namespace plugin\blog\service;
 
-use plugin\blog\model\PluginBlogNavigation;
+use plugin\blog\model\PluginBlogMark;
 use think\admin\Service;
 
 /**
@@ -16,24 +16,38 @@ class DataService extends Service
 {
 
     /**
-     * 获取首页导航
-     * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * 处理文章列表中的标签
+     * @param array $list 文章列表
+     * @return array 处理后的文章列表
      */
-    public static function getNavigation()
+    public static function markList(array $list)
     {
-        return PluginBlogNavigation::mk()->where('status',1)->field('title,url')->select()->map(function ($item){
-            if ($item['url']){
-                if ($item['url'] == '#') {
-                    $item['url'] = '/';
-                }else{
-                    $array = explode("#", $item['url']);
-                    $item['url'] = $array[1];
-                }
-            }
-            return $item;
-        })->toArray();
+        foreach ($list as &$value) {
+            $value['mark'] = self::markInfo($value['mark']);
+        }
+        return $list;
     }
+
+    public static function markInfo(string $mark = null)
+    {
+        // 缓存键
+        $ckey = 'PluginContentMarkItems';
+        // 获取缓存中的标签项
+        $items = sysvar($ckey) ?: sysvar($ckey, PluginBlogMark::items());
+        // 空值处理
+        if (empty($mark) || $mark === ',') {
+            return [];
+
+        }
+        // 去掉首尾的逗号并分割成数组
+        $markArray = explode(',', trim($mark, ','));
+
+        // 使用数组函数过滤和映射标签
+        return array_values(array_filter(
+            array_map(function($mark) use ($items) {
+                return $items[$mark] ?? null;
+            }, $markArray)
+        ));
+    }
+
 }

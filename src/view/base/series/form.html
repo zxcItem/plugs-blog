@@ -5,7 +5,7 @@
 
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-xs2 text-center padding-top-15">
-                    <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
+                    <input type="hidden" name="cover" value="{$vo.cover|default=''}">
                     <script>$('[name=cover]').uploadOneImage();</script>
                 </div>
                 <div class="layui-col-xs10">
@@ -21,6 +21,19 @@
                     </div>
                 </div>
             </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label color-green">首页展示</label>
+                <div class="layui-input-block" >
+                    {empty name='vo.is_show'}{assign name='vo.is_show' value='0'}{/empty}
+                    {foreach ['关闭','开启'] as $key => $value}
+                    {if isset($vo.is_show) && $vo.is_show eq $key}
+                    <input type="radio" name="is_show" value="{$key}" title="{$value}" checked="">
+                    {else}
+                    <input type="radio" name="is_show" value="{$key}" title="{$value}">
+                    {/if}
+                    {/foreach}
+                </div>
+            </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label color-green">集合描述</label>
                 <div class="layui-input-block">
@@ -28,6 +41,7 @@
                 </div>
             </div>
         </fieldset>
+
     </div>
 
     <div class="hr-line-dashed"></div>

@@ -48,7 +48,9 @@ class Service extends Plugin
                 'subs' => [
                     ['name' => '标签信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.mark/index"],
                     ['name' => '集合信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.series/index"],
+                    ['name' => '首页轮播管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.banner/index"],
                     ['name' => '首页导航管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.nav/index"],
+                    ['name' => '网页广告信息', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.ad/index"],
                 ],
             ],
             [

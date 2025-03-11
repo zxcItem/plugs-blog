@@ -5,11 +5,11 @@ declare (strict_types=1);
 namespace plugin\blog\model;
 
 /**
- * 文章内容模型
- * @class PluginBlogContent
+ * 广告位
+ * @class PluginBlogAd
  * @package plugin\blog\model
  */
-class PluginBlogContent extends Abs
+class PluginBlogAd extends Abs
 {
 
 }

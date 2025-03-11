@@ -31,6 +31,7 @@ class InstallBlog extends Migrator
         $this->_create_plugin_blog_mark();
         $this->_create_plugin_blog_series();
         $this->_create_plugin_blog_content();
+        $this->_create_plugin_blog_banner();
         $this->_create_plugin_blog_navigation();
     }
 
@@ -76,6 +77,7 @@ class InstallBlog extends Migrator
             ['title', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '集合名称']],
             ['sign', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '集合标识']],
             ['describe', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '描述']],
+            ['is_show', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '首页展示']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
@@ -99,6 +101,57 @@ class InstallBlog extends Migrator
         PhinxExtend::upgrade($table, [
             ['title', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '导航名称']],
             ['url', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '导航链接']],
+            ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
+            ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
+            ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
+        ], [
+            'sort','status'
+        ], true);
+    }
+
+    /**
+     * 轮播信息
+     * @class PluginBlogBanner
+     * @table plugin_blog_banner
+     * @return void
+     */
+    private function _create_plugin_blog_banner()
+    {
+        // 创建数据表对象
+        $table = $this->table('plugin_blog_banner', [
+            'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '轮播信息',
+        ]);
+        PhinxExtend::upgrade($table, [
+            ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '封面']],
+            ['title', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '标题']],
+            ['describe', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '描述']],
+            ['url', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '跳转链接']],
+            ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
+            ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
+            ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
+        ], [
+            'sort','status'
+        ], true);
+    }
+
+    /**
+     * 广告位
+     * @class PluginBlogAd
+     * @table plugin_blog_ad
+     * @return void
+     */
+    private function _create_plugin_blog_ad()
+    {
+        // 创建数据表对象
+        $table = $this->table('plugin_blog_ad', [
+            'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '广告位',
+        ]);
+        PhinxExtend::upgrade($table, [
+            ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '封面']],
+            ['title', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '标题']],
+            ['location', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => '位置']],
+            ['describe', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '描述']],
+            ['url', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '跳转链接']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
             ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],

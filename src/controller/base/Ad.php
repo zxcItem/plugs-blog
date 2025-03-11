@@ -4,22 +4,22 @@ declare (strict_types=1);
 
 namespace plugin\blog\controller\base;
 
-use plugin\blog\model\PluginBlogNavigation;
+use plugin\blog\model\PluginBlogAd;
 use plugin\blog\service\ConfigService;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 
 
 /**
- * 首页导航
- * Class Nav
+ * 广告位
+ * Class Ad
  * @package plugin\blog\controller\base
  */
-class Nav extends Controller
+class Ad extends Controller
 {
 
     /**
-     * 首页导航
+     * 广告位
      * @return void
      * @auth true
      * @menu true
@@ -29,11 +29,21 @@ class Nav extends Controller
      */
     public function index()
     {
-        PluginBlogNavigation::mQuery()->layTable(function () {
-            $this->title = '首页导航';
+        PluginBlogAd::mQuery()->layTable(function () {
+            $this->title = '广告位';
         }, function (QueryHelper $query) {
             $query->like('title')->dateBetween('create_at');
         });
+    }
+
+    /**
+     * 列表数据处理
+     * @param array $data
+     * @throws \Exception
+     */
+    protected function _index_page_filter(array &$data)
+    {
+        foreach ($data as &$datum) $datum['location'] = ConfigService::location[$datum['location']];
     }
 
     /**
@@ -42,7 +52,7 @@ class Nav extends Controller
      */
     public function add()
     {
-        PluginBlogNavigation::mForm('form');
+        PluginBlogAd::mForm('form');
     }
 
     /**
@@ -51,7 +61,7 @@ class Nav extends Controller
      */
     public function edit()
     {
-        PluginBlogNavigation::mForm('form');
+        PluginBlogAd::mForm('form');
     }
 
     /**
@@ -64,6 +74,7 @@ class Nav extends Controller
     protected function _form_filter(array &$data)
     {
         $this->rules = ConfigService::rules;
+        $this->location = ConfigService::location;
     }
 
     /**
@@ -72,7 +83,7 @@ class Nav extends Controller
      */
     public function state()
     {
-        PluginBlogNavigation::mSave($this->_vali([
+        PluginBlogAd::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -84,6 +95,6 @@ class Nav extends Controller
      */
     public function remove()
     {
-        PluginBlogNavigation::mDelete();
+        PluginBlogAd::mDelete();
     }
 }

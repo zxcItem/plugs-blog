@@ -4,22 +4,22 @@ declare (strict_types=1);
 
 namespace plugin\blog\controller\base;
 
-use plugin\blog\model\PluginBlogNavigation;
+use plugin\blog\model\PluginBlogBanner;
 use plugin\blog\service\ConfigService;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 
 
 /**
- * 首页导航
- * Class Nav
+ * 首页轮播
+ * Class Banner
  * @package plugin\blog\controller\base
  */
-class Nav extends Controller
+class Banner extends Controller
 {
 
     /**
-     * 首页导航
+     * 首页轮播
      * @return void
      * @auth true
      * @menu true
@@ -29,8 +29,8 @@ class Nav extends Controller
      */
     public function index()
     {
-        PluginBlogNavigation::mQuery()->layTable(function () {
-            $this->title = '首页导航';
+        PluginBlogBanner::mQuery()->layTable(function () {
+            $this->title = '首页轮播';
         }, function (QueryHelper $query) {
             $query->like('title')->dateBetween('create_at');
         });
@@ -42,7 +42,7 @@ class Nav extends Controller
      */
     public function add()
     {
-        PluginBlogNavigation::mForm('form');
+        PluginBlogBanner::mForm('form');
     }
 
     /**
@@ -51,7 +51,7 @@ class Nav extends Controller
      */
     public function edit()
     {
-        PluginBlogNavigation::mForm('form');
+        PluginBlogBanner::mForm('form');
     }
 
     /**
@@ -72,7 +72,7 @@ class Nav extends Controller
      */
     public function state()
     {
-        PluginBlogNavigation::mSave($this->_vali([
+        PluginBlogBanner::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -84,6 +84,6 @@ class Nav extends Controller
      */
     public function remove()
     {
-        PluginBlogNavigation::mDelete();
+        PluginBlogBanner::mDelete();
     }
 }
