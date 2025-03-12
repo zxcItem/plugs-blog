@@ -11,6 +11,7 @@ use plugin\blog\model\PluginBlogMark;
 use plugin\blog\model\PluginBlogNavigation;
 use plugin\blog\model\PluginBlogSeries;
 use think\admin\Service;
+use think\facade\Db;
 
 /**
  * 文章
@@ -149,7 +150,7 @@ class NewsService extends Service
     }
 
     /**
-     * 获取集合详情
+     * 获取集合列表
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -167,6 +168,23 @@ class NewsService extends Service
     }
 
     /**
+     * 获取集合内热门文章
+     * @param string $series
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public static function getSeriesNewsList(string $series)
+    {
+        return PluginBlogContent::mQuery()->where(['status'=>1,'series'=>$series])
+            ->field('title,code,cover,views')
+            ->order('views desc')
+            ->limit(6)
+            ->select()->toArray();
+    }
+
+    /**
      * 获取文章详情
      * @param array $map
      * @return array
@@ -178,12 +196,13 @@ class NewsService extends Service
     {
         $content = PluginBlogContent::mQuery()
             ->where($map)
-            ->field('title, code, describe, views, content, mark, likes, update_at')
+            ->field('title, code, describe,series, views, content, mark, likes, update_at')
             ->find();
         if ($content) {
             // 修改返回的内容
             $content = $content->toArray(); // 将查询结果转为数组
             $content['mark'] = DataService::markInfo($content['mark']);
+            PluginBlogContent::mQuery()->where($map)->inc('views')->update();
         }
         return $content;
     }

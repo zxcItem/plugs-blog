@@ -34,7 +34,7 @@ class Item extends Controller
         PluginBlogContent::mQuery()->layTable(function () {
             $this->title = '文章内容管理';
         }, function (QueryHelper $query) {
-            $query->like('title')->dateBetween('create_at');
+            $query->like('title,code')->dateBetween('create_at');
         });
     }
 
