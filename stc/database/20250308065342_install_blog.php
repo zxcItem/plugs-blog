@@ -28,6 +28,7 @@ class InstallBlog extends Migrator
      */
     public function change()
     {
+        $this->_create_plugin_blog_ad();
         $this->_create_plugin_blog_mark();
         $this->_create_plugin_blog_series();
         $this->_create_plugin_blog_content();
