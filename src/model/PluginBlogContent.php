@@ -12,4 +12,12 @@ namespace plugin\blog\model;
 class PluginBlogContent extends Abs
 {
 
+    /**
+     * 管理集合信息
+     * @return \think\model\relation\BelongsTo
+     */
+    public function series()
+    {
+        return $this->belongsTo(PluginBlogSeries::class,'series','sign');
+    }
 }

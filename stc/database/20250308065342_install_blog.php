@@ -176,6 +176,7 @@ class InstallBlog extends Migrator
             ['cover', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '封面']],
             ['title', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '标题']],
             ['describe', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '描述']],
+            ['keywords', 'string', ['limit' => 255,'default' => NULL, 'null' => true, 'comment' => '关键字']],
             ['code', 'string', ['limit' => 32,'default' => null, 'null' => true, 'comment' => '编号']],
             ['content', 'text', ['default' => NULL, 'null' => true, 'comment' => '内容']],
             ['series', 'string', ['limit' => 32,'default' => NULL, 'null' => true, 'comment' => '所属集合']],
@@ -184,13 +185,16 @@ class InstallBlog extends Migrator
             ['virtual_view', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟浏览量']],
             ['likes', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '点赞量']],
             ['virtual_like', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '虚拟点赞量']],
-            ['recommend', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '推荐']],
+            ['comment_sum', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '评论量']],
+            ['recommend', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '推荐']],
+            ['top', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '置顶']],
+            ['comment', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '评论状态']],
             ['sort', 'biginteger', ['default' => 0, 'null' => true, 'comment' => '排序权重']],
-            ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态']],
+            ['status', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '状态']],
             ['update_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '更新时间']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [
-            'series','mark','views','virtual_view','likes','virtual_like','sort','status','update_at'
+            'series','mark','views','likes','recommend','top','comment','sort','status','update_at'
         ], true);
     }
 }

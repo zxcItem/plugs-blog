@@ -105,7 +105,7 @@ class NewsService extends Service
         $query = $query->where(['status' => 1])
             ->where($map)
             ->field('title,code,cover,describe,update_at,views,likes,mark')
-            ->order(input('sort','update_at'),'desc')
+            ->order(input('sort','top desc,sort desc,update_at desc'))
             ->page(true, false, false, 5);
         $query['list'] = DataService::markList($query['list']);
         return $query;
@@ -122,10 +122,10 @@ class NewsService extends Service
     public static function recommendNews(string $string)
     {
         if ($string == 'views'){
-            $map = ['status' => 1];$order = 'views desc';
+            $map = ['status' => 1];$order = 'views desc,sort desc';
         }
         if ($string == 'recommend'){
-            $map = ['status' => 1,'recommend'=>1];$order = 'recommend desc,views desc';
+            $map = ['status' => 1,'recommend'=>1];$order = 'recommend desc,views desc,sort desc';
         }
         return PluginBlogContent::mQuery()->where($map)
             ->field('title,code,cover,views')
@@ -196,7 +196,7 @@ class NewsService extends Service
     {
         $content = PluginBlogContent::mQuery()
             ->where($map)
-            ->field('title, code, describe,series, views, content, mark, likes, update_at')
+            ->field('title, code, describe,series, views, content, mark, likes,comment, update_at')
             ->find();
         if ($content) {
             // 修改返回的内容

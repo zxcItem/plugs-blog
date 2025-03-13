@@ -7,6 +7,7 @@ namespace plugin\blog\controller\content;
 use plugin\blog\model\PluginBlogContent;
 use plugin\blog\model\PluginBlogMark;
 use plugin\blog\model\PluginBlogSeries;
+use plugin\blog\service\DataService;
 use think\admin\Controller;
 use think\admin\extend\CodeExtend;
 use think\admin\helper\QueryHelper;
@@ -31,11 +32,22 @@ class Item extends Controller
      */
     public function index()
     {
+        $this->status = $this->request->get('status', 1);
         PluginBlogContent::mQuery()->layTable(function () {
             $this->title = '文章内容管理';
         }, function (QueryHelper $query) {
-            $query->like('title,code')->dateBetween('create_at');
+            $query->with(['series'])->equal('status')->like('title,code')->dateBetween('create_at');
         });
+    }
+
+    /**
+     * 列表数据处理
+     * @param array $data
+     * @throws \Exception
+     */
+    protected function _index_page_filter(array &$data)
+    {
+        foreach ($data as &$datum) $datum['mark'] = DataService::markInfo($datum['mark']);
     }
 
     /**

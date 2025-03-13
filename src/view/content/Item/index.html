@@ -14,9 +14,17 @@
 
 {block name="content"}
 <div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        {foreach ['1'=>'文章管理','0'=>'草稿箱'] as $k=>$v}
+        {if isset($status) and $status eq $k}
+        <li class="layui-this" data-open="{:url('index')}?status={$k}">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?status={$k}">{$v}</li>
+        {/if}{/foreach}
+    </ul>
     <div class="layui-tab-content">
         {include file='content/item/index_search'}
-        <table id="ItemContentTable" data-url="{:request()->url()}" data-target-search="form.form-search"></table>
+        <table id="ItemContentTable" data-line="2" data-url="{:request()->url()}" data-target-search="form.form-search"></table>
     </div>
 </div>
 
@@ -29,40 +37,64 @@
                 {checkbox: true, fixed: true},
                 {field: 'sort', title: '{:lang("排序权重")}', width: 100, align: 'center', sort: true, templet: '#SortInputTpl'},
                 {
-                    field: 'cover', title: '封面', width: 100, align: 'center', templet: function (d) {
-                        if (!d.cover) return '-';
-                        return layui.laytpl('<div class="headimg-sm shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{{d.cover}}"></div>').render(d);
+                    field: 'title', title: '商品名称', minWidth: 220, sort: true, templet: function (d) {
+                        d.html = showTableImage(d.cover, false, 'sm')
+                        return laytpl("<div class='flex'><div>{{-d.html}}</div><div class='ta-pl-10 nowrap'>标题：{{d.title}}<br>编号：<b class='color-blue'>{{d.code}}</b></div></div>").render(d);
                     }
                 },
-                {field: 'code', title: '文章编号', minWidth: 100, align: 'center'},
-                {field: 'title', title: '文章标题', minWidth: 100, align: 'center'},
-                {field: 'describe', title: '描述', minWidth: 100, align: 'center'},
-                {field: 'status', title: '{:lang("使用状态")}', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
-                {field: 'create_at', title: '创建时间', align: 'center', minWidth: 150, sort: true},
+                {
+                    field: 'recommend', title: '推荐置顶', minWidth: 110, templet: function (d) {
+                        if (d.recommend > 0) {
+                            d.html = ' 推荐状态： <i class="layui-icon layui-icon-ok-circle color-red"></i><br>';
+                        } else {
+                            d.html = ' 推荐状态： <i class="layui-icon layui-icon-error"></i><br>';
+                        }
+                        if (d.top > 0){
+                            d.html += ' 置顶状态： <i class="layui-icon layui-icon-ok-circle color-red"></i><br>';
+                        }else {
+                            d.html += ' 置顶状态： <i class="layui-icon layui-icon-error"></i><br>';
+                        }
+                        return d.html
+                    }
+                },
+                {
+                    field: 'views', title: '浏览量', minWidth: 140, sort: true, templet: function (d) {
+                        let tpls = [];
+                        tpls.push('实际浏览量： <b class=\'color-blue\'>{{d.views - d.virtual_view}}</b>');
+                        tpls.push('虚拟浏览量： <b class=\'color-blue\'>{{d.virtual_view}}</b>');
+                        return laytpl(tpls.join('<br>')).render(d);
+                    }
+                },
+                {
+                    field: 'likes', title: '点赞量', minWidth: 140, sort: true, templet: function (d) {
+                        let tpls = [];
+                        tpls.push('实际点赞量： <b class=\'color-blue\'>{{d.likes - d.virtual_like}}</b>');
+                        tpls.push('虚拟点赞量： <b class=\'color-blue\'>{{d.virtual_like}}</b>');
+                        return laytpl(tpls.join('<br>')).render(d);
+                    }
+                },
+                {
+                    field: 'comment', title: '评论状态', minWidth: 130, templet: function (d) {
+                        if (d.comment > 0) {
+                            d.html = ' 评论状态： <i class="layui-icon layui-icon-ok-circle color-red"></i><br>';
+                        } else {
+                            d.html = ' 评论状态： <i class="layui-icon layui-icon-error"></i><br>';
+                        }
+                        d.html += ' 评论数量： <b class=\'color-blue\'>{{d.comment_sum}}</b>';
+                        return laytpl(d.html).render(d);
+                    }
+                },
+                {
+                    title: '标签分类',  minWidth: 150, templet: function (d) {
+                        let tpls = '集合：' + (d.series.title ?? '-');
+                        return tpls + '<br>标签：' + (d.mark.length > 0 ? d.mark.join('、') : '-');
+                    }
+                },
+                {field: 'create_at', title: '创建时间', minWidth: 150, templet: "<div>更新：{{d.update_at}}<br>创建：{{d.create_at}}</div>"},
                 {toolbar: '#toolbar', title: '操作面板', align: 'center', minWidth: 150, fixed: 'right'}
             ]]
         });
-        // 数据状态切换操作
-        layui.form.on('switch(StatusSwitch)', function (obj) {
-            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
-            $.form.load("{:url('state')}", data, 'post', function (ret) {
-                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
-                    $('#ItemContentTable').trigger('reload');
-                }); else {
-                    $('#ItemContentTable').trigger('reload')
-                }
-                return false;
-            }, false);
-        });
     });
-</script>
-<!-- 数据状态切换模板 -->
-<script type="text/html" id="StatusSwitchTpl">
-    <!--{if auth("state")}-->
-    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已激活')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
-    <!--{else}-->
-    {{-d.status ? '<b class="color-green">{:lang("已激活")}</b>' : '<b class="color-red">{:lang("已禁用")}</b>'}}
-    <!--{/if}-->
 </script>
 <!-- 列表排序权重模板 -->
 <script type="text/html" id="SortInputTpl">
