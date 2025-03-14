@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace plugin\blog\service;
 
+use plugin\blog\model\PluginBlogContent;
 use plugin\blog\model\PluginBlogMark;
 use think\admin\Service;
 
@@ -28,6 +29,11 @@ class DataService extends Service
         return $list;
     }
 
+    /**
+     * 文章标签处理
+     * @param string|null $mark
+     * @return array
+     */
     public static function markInfo(string $mark = null)
     {
         // 缓存键
@@ -48,6 +54,15 @@ class DataService extends Service
                 return $items[$mark] ?? null;
             }, $markArray)
         ));
+    }
+
+    public static function getAuthor()
+    {
+        $author = ConfigService::get();
+        $author['newsCount'] = PluginBlogContent::mk()->cache(true, 60)->count();
+        $author['viewsCount'] = PluginBlogContent::mk()->cache(true, 60)->sum('views');
+        $author['likesCount'] = PluginBlogContent::mk()->cache(true, 60)->sum('likes');
+        return $author;
     }
 
 }

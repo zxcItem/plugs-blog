@@ -46,6 +46,8 @@ class Service extends Plugin
             [
                 'name' => '参数配置',
                 'subs' => [
+                    ['name' => '应用参数配置', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.config/index"],
+                    ['name' => '统计数据管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.report/index"],
                     ['name' => '标签信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.mark/index"],
                     ['name' => '集合信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.series/index"],
                     ['name' => '首页轮播管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.banner/index"],

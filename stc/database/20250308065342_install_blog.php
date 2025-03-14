@@ -30,9 +30,10 @@ class InstallBlog extends Migrator
     {
         $this->_create_plugin_blog_ad();
         $this->_create_plugin_blog_mark();
+        $this->_create_plugin_blog_banner();
+        $this->_create_plugin_blog_record();
         $this->_create_plugin_blog_series();
         $this->_create_plugin_blog_content();
-        $this->_create_plugin_blog_banner();
         $this->_create_plugin_blog_navigation();
     }
 
@@ -196,6 +197,28 @@ class InstallBlog extends Migrator
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [
             'series','mark','views','likes','recommend','top','comment','sort','status','update_at'
+        ], true);
+    }
+
+    /**
+     * 文章访问记录
+     * @class PluginBlogRecord
+     * @table plugin_blog_record
+     * @return void
+     */
+    private function _create_plugin_blog_record()
+    {
+        // 创建数据表对象
+        $table = $this->table('plugin_blog_record', [
+            'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '广告位',
+        ]);
+        PhinxExtend::upgrade($table, [
+            ['ip', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => 'IP地址']],
+            ['user_agent', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => 'user_agent']],
+            ['code', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '描述']],
+            ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
+        ], [
+            'ip','create_at'
         ], true);
     }
 }

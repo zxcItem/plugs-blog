@@ -21,7 +21,7 @@
                 {toolbar: '#SelectToolbar', title: '操作面板', width: 160, align: 'center', fixed: 'right'},
             ]]
         }).trigger('tool', function (item) {
-            let attr = [item.data.code];
+            let attr = [item.data.code+'.html'];
             window.setItemValue(attr.join('#'));
             $.msg.closeThisModal(this);
         });

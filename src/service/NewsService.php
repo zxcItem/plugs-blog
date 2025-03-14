@@ -9,6 +9,7 @@ use plugin\blog\model\PluginBlogBanner;
 use plugin\blog\model\PluginBlogContent;
 use plugin\blog\model\PluginBlogMark;
 use plugin\blog\model\PluginBlogNavigation;
+use plugin\blog\model\PluginBlogRecord;
 use plugin\blog\model\PluginBlogSeries;
 use think\admin\Service;
 use think\facade\Db;
@@ -196,13 +197,14 @@ class NewsService extends Service
     {
         $content = PluginBlogContent::mQuery()
             ->where($map)
-            ->field('title, code, describe,series, views, content, mark, likes,comment, update_at')
+            ->field('title,cover,code, describe,keywords,series, views, content, mark, likes,comment, update_at')
             ->find();
         if ($content) {
             // 修改返回的内容
             $content = $content->toArray(); // 将查询结果转为数组
             $content['mark'] = DataService::markInfo($content['mark']);
             PluginBlogContent::mQuery()->where($map)->inc('views')->update();
+            PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'code'=>$map['code']]);
         }
         return $content;
     }

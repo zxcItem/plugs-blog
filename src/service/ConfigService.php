@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace plugin\blog\service;
 
+use think\admin\Exception;
 use think\admin\Service;
 
 /**
@@ -13,6 +14,12 @@ use think\admin\Service;
  */
 class ConfigService extends Service
 {
+    /**
+     * 商城配置缓存名
+     * @var string
+     */
+    private static $skey = 'plugin.blog.config';
+
     /**
      * 跳转规则定义
      * @var string[]
@@ -33,4 +40,28 @@ class ConfigService extends Service
         'content_info_right'   => '文章详情侧边-多项',
         'content_info_bottom'  => '文章详情底部-单项',
     ];
+
+    /**
+     * 读取配置参数
+     * @param string|null $name
+     * @param $default
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public static function get(?string $name = null, $default = null)
+    {
+        $syscfg = sysvar(self::$skey) ?: sysvar(self::$skey, sysdata(self::$skey));
+        return is_null($name) ? $syscfg : ($syscfg[$name] ?? $default);
+    }
+
+    /**
+     * 配置参数
+     * @param array $data
+     * @return mixed
+     * @throws Exception
+     */
+    public static function set(array $data)
+    {
+        return sysdata(self::$skey, $data);
+    }
 }

@@ -1,0 +1,82 @@
+{extend name='main'}
+
+{block name="button"}
+<!--{if auth('params')}-->
+<a class="layui-btn layui-btn-sm layui-btn-primary" data-modal="{:url('params')}">{:lang('基本参数配置')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="layui-card padding-20 shadow">
+    <div class="layui-card-body layui-col-space15 layui-form-item">
+        <fieldset class="layui-col-sm6 layui-form-pane">
+            <legend>博主资料</legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs4">
+                    <div class="layui-table">
+                        <div class="headimg WechatUserHead" data-lazy-src="{$data.blogger_cover|default='__ROOT__/static/theme/img/headimg.png'}" data-tips-image style="height: 150px;width: 150px"></div>
+                    </div>
+                </div>
+                <div class="layui-col-xs8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-bg-gray">博主昵称</label>
+                        <div class="layui-input-block">
+                            <input value="{$data.blogger_nickname|default=''}" readonly class="layui-input layui-bg-gray">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-bg-gray">博主邮箱</label>
+                        <div class="layui-input-block">
+                            <input value="{$data.blogger_email|default=''}" readonly class="layui-input layui-bg-gray">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-bg-gray">社交电报</label>
+                        <div class="layui-input-block">
+                            <input value="{$data.blogger_telegram|default=''}" readonly class="layui-input layui-bg-gray">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label layui-bg-gray">博主简介</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea layui-bg-gray" readonly>{$data.blogger_describe|default=""}</textarea>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-col-sm6 layui-form-pane">
+            <legend>SEO配置</legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs4">
+                    <div class="layui-table">
+                        <div class="headimg-lg WechatUserHead" data-lazy-src="{$data.site_cover|default='__ROOT__/static/theme/img/headimg.png'}" data-tips-image style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="layui-col-xs8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-bg-gray">SEO标题</label>
+                        <div class="layui-input-block">
+                            <input value="{$data.seo_title|default=''}" readonly class="layui-input layui-bg-gray">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-bg-gray">SEO关键字</label>
+                        <div class="layui-input-block">
+                            <input value="{$data.seo_keywords|default=''}" readonly class="layui-input layui-bg-gray">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label layui-bg-gray">SEO描述</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea layui-bg-gray" readonly>{$data.seo_describe|default=""}</textarea>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+<!--{/if}-->
+{/block}

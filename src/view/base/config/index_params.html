@@ -1,0 +1,73 @@
+<form action="{:sysuri()}" class="layui-form-pane layui-tab layui-form layui-card" data-auto="true" method="post">
+    <ul class="layui-tab-title">
+        <li class="layui-this">博主信息</li>
+        <li>SEO配置</li>
+    </ul>
+    <div class="layui-card-body padding-left-40 layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs2 text-center padding-top-15">
+                    <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="blogger_cover" value="{$vo.blogger_cover|default=''}">
+                    <script>$('[name=blogger_cover]').uploadOneImage();</script>
+                </div>
+                <div class="layui-col-xs10">
+                    <label class="layui-form-label color-green">博主昵称</label>
+                    <div class="layui-input-block">
+                        <input name="blogger_nickname" value="{$vo.blogger_nickname|default=''}" placeholder="请输入博主昵称" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs5">
+                    <label class="layui-form-label color-green">博主邮箱</label>
+                    <div class="layui-input-block">
+                        <input name="blogger_email" value="{$vo.blogger_email|default=''}" placeholder="请输入博主邮箱" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs5">
+                    <label class="layui-form-label color-green">社交电报</label>
+                    <div class="layui-input-block">
+                        <input name="blogger_telegram" value="{$vo.blogger_telegram|default=''}" placeholder="请输入社交电报" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label color-green">博主简介</label>
+                    <div class="layui-input-block">
+                        <textarea name="blogger_describe" placeholder="请输入标签描述" class="layui-textarea">{$vo.blogger_describe|default=""}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs2 text-center padding-top-15">
+                    <input type="hidden" data-cut-width="500" data-cut-height="158" data-max-width="500" data-max-height="158" name="site_cover" value="{$vo.site_cover|default=''}">
+                    <script>$('[name=site_cover]').uploadOneImage();</script>
+                </div>
+                <div class="layui-col-xs10">
+                    <label class="layui-form-label color-green">SEO标题</label>
+                    <div class="layui-input-block">
+                        <input name="seo_title" value="{$vo.seo_title|default=''}" placeholder="请输入SEO标题" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-xs10">
+                    <label class="layui-form-label color-green">SEO关键字</label>
+                    <div class="layui-input-block">
+                        <input name="seo_keywords" value="{$vo.seo_keywords|default=''}" placeholder="请输入SEO关键字" required class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label color-green">SEO描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="seo_describe" placeholder="请输入SEO描述" class="layui-textarea">{$vo.seo_describe|default=""}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" data-close type='button' data-confirm="确定要取消编辑吗？">取消编辑</button>
+    </div>
+</form>
