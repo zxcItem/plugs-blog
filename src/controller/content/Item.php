@@ -139,4 +139,10 @@ class Item extends Controller
     {
         PluginBlogContent::mDelete();
     }
+
+    public function show()
+    {
+        $this->title = '预览文章内容';
+        PluginBlogContent::mForm('show');
+    }
 }

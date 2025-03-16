@@ -39,7 +39,12 @@
                 {
                     field: 'title', title: '商品名称', minWidth: 220, sort: true, templet: function (d) {
                         d.html = showTableImage(d.cover, false, 'sm')
-                        return laytpl("<div class='flex'><div>{{-d.html}}</div><div class='ta-pl-10 nowrap'>标题：{{d.title}}<br>编号：<b class='color-blue'>{{d.code}}</b></div></div>").render(d);
+                        d.showPayments = "{:url('plugin-blog/content.item/show')}"
+                        return laytpl("<div class='flex'><div>{{-d.html}}</div>" +
+                            "<a class='color-text' data-area = \"['1000px','1000px']\" data-modal=\"{{d.showPayments}}?id={{d.id}}\">" +
+                            "<div class='ta-pl-10 nowrap'>标题：{{d.title}}" +
+                            "</a>" +
+                            "<br>编号：<b class='color-blue'>{{d.code}}</b></div></div>").render(d);
                     }
                 },
                 {

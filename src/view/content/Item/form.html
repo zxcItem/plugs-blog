@@ -1,131 +1,7 @@
 {extend name="main"}
 
 {block name="style"}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css">
-<style>
-    /* 代码块样式 */
-    .preview-content pre {
-        background-color: #f5f5f5;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        margin: 10px 0;
-        overflow-x: auto;
-        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-        font-size: 14px;
-        line-height: 1.5;
-    }
 
-    .preview-content code {
-        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-        background-color: #f5f5f5;
-        padding: 2px 4px;
-        border-radius: 3px;
-        color: #c7254e;
-    }
-
-    .preview-content pre code {
-        padding: 0;
-        color: inherit;
-        background-color: transparent;
-        border-radius: 0;
-        display: block;
-        white-space: pre;
-        word-break: normal;
-    }
-
-    /* 图片样式 */
-    .preview-content img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 10px 0;
-    }
-
-    /* 表格样式 */
-    .preview-content table {
-        border-collapse: collapse;
-        width: 100%;
-        margin: 15px 0;
-    }
-
-    .preview-content table, .preview-content th, .preview-content td {
-        border: 1px solid #ddd;
-    }
-
-    .preview-content th, .preview-content td {
-        padding: 8px;
-        text-align: left;
-    }
-
-    .preview-content th {
-        background-color: #f2f2f2;
-    }
-
-    /* 预览区域基础样式 */
-    .preview-content {
-        font-size: 14px;
-        line-height: 1.6;
-        color: #333;
-        max-height: 650px;
-        overflow-y: auto;
-        word-break: break-all;
-        white-space: normal;
-    }
-
-    /* 标题样式 */
-    .preview-content h1, .preview-content h2, .preview-content h3,
-    .preview-content h4, .preview-content h5, .preview-content h6 {
-        margin-top: 20px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        line-height: 1.2;
-    }
-
-    /* 段落样式 */
-    .preview-content p {
-        margin-bottom: 15px;
-    }
-
-    /* 列表样式 */
-    .preview-content ul, .preview-content ol {
-        margin-bottom: 15px;
-        padding-left: 20px;
-    }
-
-    /* 引用样式 */
-    .preview-content blockquote {
-        padding: 10px 20px;
-        margin: 0 0 20px;
-        border-left: 5px solid #eee;
-        color: #666;
-    }
-
-    /* 预览区域容器样式 */
-    .preview-container {
-        height: 850px;
-        background-color: #ffffff;
-    }
-
-    .preview-card-body {
-        padding: 15px;
-    }
-
-    .preview-title {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        word-break: break-all;
-        white-space: normal;
-    }
-
-    .preview-describe {
-        color: #999;
-        margin-bottom: 15px;
-        word-break: break-all;
-        white-space: normal;
-    }
-</style>
 {/block}
 
 {block name="button"}
@@ -134,287 +10,170 @@
 {/block}
 
 {block name='content'}
-<div class="layui-clear layui-form-pane nowrap padding-bottom-30 layui-row layui-col-space15">
-    <div class="layui-col-xs8">
-        <form action="{:sysuri()}" class="layui-form-pane layui-card layui-form" data-auto="true" method="post">
-            <div class="layui-card-body">
-                <div class="layui-row layui-col-space15">
-                    <div class="layui-col-xs2 text-center padding-top-15">
-                        <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
-                        <script>$('[name=cover]').uploadOneImage();</script>
-                    </div>
-                    <div class="layui-col-xs10">
-                        <label class="layui-form-label color-green">文章标题</label>
-                        <div class="layui-input-block">
-                            <input name="title" value="{$vo.title|default=''}" placeholder="请输入内容标题" required class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-col-xs10">
-                        <label class="layui-form-label color-green">关键字</label>
-                        <div class="layui-input-block">
-                            <input name="keywords" value="{$vo.keywords|default=''}" placeholder="请输入关键字" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-row layui-col-space15">
-                    <div class="layui-col-xs6">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">所属集合</label>
-                            <div class="layui-input-block">
-                                <select class="layui-select" name="series">
-                                    <option selected value="">------------无-----------</option>
-                                    {foreach $serice as $k=>$v}
-                                    {if isset($vo.series) and $vo.series eq $k}
-                                    <option selected value="{$k}">{$v}</option>
-                                    {else}
-                                    <option value="{$k}">{$v}</option>
-                                    {/if}{/foreach}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-form-item"  pane="">
-                                <label class="layui-form-label color-green">文章标签</label>
-                                <div class="layui-input-block">
-                                    {foreach $marks as $tag}{if isset($vo.mark) && is_array($vo.mark) && in_array($tag.sign, $vo.mark)}
-                                    <label class="think-checkbox notselect"><input checked lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
-                                    {else}
-                                    <label class="think-checkbox notselect"><input lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
-                                    {/if}{/foreach}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item" pane="">
-                            <label class="layui-form-label color-green">置顶状态</label>
-                            <div class="layui-input-block" >
-                                {empty name='vo.top'}{assign name='vo.top' value='0'}{/empty}
-                                {foreach ['关闭','开启'] as $key => $value}
-                                {if isset($vo.top) && $vo.top eq $key}
-                                <input type="radio" name="top" value="{$key}" title="{$value}" checked="">
-                                {else}
-                                <input type="radio" name="top" value="{$key}" title="{$value}">
-                                {/if}
-                                {/foreach}
-                            </div>
-                        </div>
-                        <div class="layui-form-item" pane="">
-                            <label class="layui-form-label color-green">推荐状态</label>
-                            <div class="layui-input-block" >
-                                {empty name='vo.recommend'}{assign name='vo.recommend' value='0'}{/empty}
-                                {foreach ['关闭','开启'] as $key => $value}
-                                {if isset($vo.recommend) && $vo.recommend eq $key}
-                                <input type="radio" name="recommend" value="{$key}" title="{$value}" checked="">
-                                {else}
-                                <input type="radio" name="recommend" value="{$key}" title="{$value}">
-                                {/if}
-                                {/foreach}
-                            </div>
-                        </div>
-                        <div class="layui-form-item" pane="">
-                            <label class="layui-form-label color-green">评论状态</label>
-                            <div class="layui-input-block" >
-                                {empty name='vo.comment'}{assign name='vo.comment' value='0'}{/empty}
-                                {foreach ['关闭','开启'] as $key => $value}
-                                {if isset($vo.comment) && $vo.comment eq $key}
-                                <input type="radio" name="comment" value="{$key}" title="{$value}" checked="">
-                                {else}
-                                <input type="radio" name="comment" value="{$key}" title="{$value}">
-                                {/if}
-                                {/foreach}
-                            </div>
-                        </div>
-                        <div class="layui-form-item" pane="">
-                            <label class="layui-form-label color-green">发布状态</label>
-                            <div class="layui-input-block" >
-                                {empty name='vo.status'}{assign name='vo.status' value='0'}{/empty}
-                                {foreach ['草稿','发布'] as $key => $value}
-                                {if isset($vo.status) && $vo.status eq $key}
-                                <input type="radio" name="status" value="{$key}" title="{$value}" checked="">
-                                {else}
-                                <input type="radio" name="status" value="{$key}" title="{$value}">
-                                {/if}
-                                {/foreach}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">浏览数量</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="views" value="{$vo.views|default=0}" readonly placeholder="请输入浏览量" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">虚拟浏览量</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="virtual_view" value="{$vo.virtual_view|default=mt_rand(3000,5000)}" readonly placeholder="请输入虚拟浏览量" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">点赞数量</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="likes" value="{$vo.likes|default=0}" readonly placeholder="请输入点赞量" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">虚拟点赞量</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="virtual_like" value="{$vo.virtual_like|default=mt_rand(2000,3000)}" readonly placeholder="请输入虚拟点赞量" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label color-green">评论数量</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="comment_sum" value="{$vo.comment_sum|default=0}" placeholder="请输入评论数量" class="layui-input">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label color-green">文章摘要</label>
-                    <div class="layui-input-block">
-                        <textarea name="describe" placeholder="请输入文章摘要" class="layui-textarea">{$vo.describe|default=""}</textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label color-green">文章详情</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-hide" name="content" placeholder="请输入文章内容">{$vo.content|default=''}</textarea>
-                    </div>
-                </div>
-
-                <div class="hr-line-dashed"></div>
-                {notempty name='vo.id'}<input name='id' type='hidden' value='{$vo.id}'>{/notempty}
-                {notempty name='vo.code'}<input name='code' type='hidden' value='{$vo.code}'>{/notempty}
-
-                <div class="layui-form-item text-center">
-                    <button class="layui-btn" type="submit">保存数据</button>
-                    <button class="layui-btn layui-btn-danger" data-history-back data-confirm="确定要取消编辑吗？" type='button'>取消编辑</button>
+<form action="{:sysuri()}" class="layui-form-pane layui-card layui-form" data-auto="true" method="post">
+    <div class="layui-card-body">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs2 text-center padding-top-15">
+                <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
+                <script>$('[name=cover]').uploadOneImage();</script>
+            </div>
+            <div class="layui-col-xs10">
+                <label class="layui-form-label color-green">文章标题</label>
+                <div class="layui-input-block">
+                    <input name="title" value="{$vo.title|default=''}" placeholder="请输入内容标题" required class="layui-input">
                 </div>
             </div>
-
-        </form>
-    </div>
-    <div class="layui-col-xs4">
-        <div class="layui-card-body preview-container">
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-xs12">
-                    <div class="layui-card">
-                        <div class="layui-card-header">
-                            <span class="color-green">文章预览</span>
+            <div class="layui-col-xs10">
+                <label class="layui-form-label color-green">关键字</label>
+                <div class="layui-input-block">
+                    <input name="keywords" value="{$vo.keywords|default=''}" placeholder="请输入关键字" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">所属集合</label>
+                    <div class="layui-input-block">
+                        <select class="layui-select" name="series">
+                            <option selected value="">------------无-----------</option>
+                            {foreach $serice as $k=>$v}
+                            {if isset($vo.series) and $vo.series eq $k}
+                            <option selected value="{$k}">{$v}</option>
+                            {else}
+                            <option value="{$k}">{$v}</option>
+                            {/if}{/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-item"  pane="">
+                        <label class="layui-form-label color-green">文章标签</label>
+                        <div class="layui-input-block">
+                            {foreach $marks as $tag}{if isset($vo.mark) && is_array($vo.mark) && in_array($tag.sign, $vo.mark)}
+                            <label class="think-checkbox notselect"><input checked lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
+                            {else}
+                            <label class="think-checkbox notselect"><input lay-ignore name="mark[]" type="checkbox" value="{$tag.sign}"> {$tag.title}</label>
+                            {/if}{/foreach}
                         </div>
-                        <div class="layui-card-body preview-card-body">
-                            <div class="preview-title" id="preview-title"></div>
-                            <div class="preview-describe" id="preview-describe"></div>
-                            <div class="preview-content" id="preview-content"></div>
-                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label color-green">置顶状态</label>
+                    <div class="layui-input-block" >
+                        {empty name='vo.top'}{assign name='vo.top' value='0'}{/empty}
+                        {foreach ['关闭','开启'] as $key => $value}
+                        {if isset($vo.top) && $vo.top eq $key}
+                        <input type="radio" name="top" value="{$key}" title="{$value}" checked="">
+                        {else}
+                        <input type="radio" name="top" value="{$key}" title="{$value}">
+                        {/if}
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label color-green">推荐状态</label>
+                    <div class="layui-input-block" >
+                        {empty name='vo.recommend'}{assign name='vo.recommend' value='0'}{/empty}
+                        {foreach ['关闭','开启'] as $key => $value}
+                        {if isset($vo.recommend) && $vo.recommend eq $key}
+                        <input type="radio" name="recommend" value="{$key}" title="{$value}" checked="">
+                        {else}
+                        <input type="radio" name="recommend" value="{$key}" title="{$value}">
+                        {/if}
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label color-green">评论状态</label>
+                    <div class="layui-input-block" >
+                        {empty name='vo.comment'}{assign name='vo.comment' value='0'}{/empty}
+                        {foreach ['关闭','开启'] as $key => $value}
+                        {if isset($vo.comment) && $vo.comment eq $key}
+                        <input type="radio" name="comment" value="{$key}" title="{$value}" checked="">
+                        {else}
+                        <input type="radio" name="comment" value="{$key}" title="{$value}">
+                        {/if}
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label color-green">发布状态</label>
+                    <div class="layui-input-block" >
+                        {empty name='vo.status'}{assign name='vo.status' value='0'}{/empty}
+                        {foreach ['草稿','发布'] as $key => $value}
+                        {if isset($vo.status) && $vo.status eq $key}
+                        <input type="radio" name="status" value="{$key}" title="{$value}" checked="">
+                        {else}
+                        <input type="radio" name="status" value="{$key}" title="{$value}">
+                        {/if}
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">浏览数量</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="views" value="{$vo.views|default=0}" readonly placeholder="请输入浏览量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">虚拟浏览量</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="virtual_view" value="{$vo.virtual_view|default=mt_rand(3000,5000)}" readonly placeholder="请输入虚拟浏览量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">点赞数量</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="likes" value="{$vo.likes|default=0}" readonly placeholder="请输入点赞量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">虚拟点赞量</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="virtual_like" value="{$vo.virtual_like|default=mt_rand(2000,3000)}" readonly placeholder="请输入虚拟点赞量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label color-green">评论数量</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="comment_sum" value="{$vo.comment_sum|default=0}" placeholder="请输入评论数量" class="layui-input">
                     </div>
                 </div>
             </div>
         </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label color-green">文章摘要</label>
+            <div class="layui-input-block">
+                <textarea name="describe" placeholder="请输入文章摘要" class="layui-textarea">{$vo.describe|default=""}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label color-green">文章详情</label>
+            <div class="layui-input-block">
+                <textarea class="layui-hide" name="content" placeholder="请输入文章内容">{$vo.content|default=''}</textarea>
+            </div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        {notempty name='vo.id'}<input name='id' type='hidden' value='{$vo.id}'>{/notempty}
+        {notempty name='vo.code'}<input name='code' type='hidden' value='{$vo.code}'>{/notempty}
+
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">保存数据</button>
+            <button class="layui-btn layui-btn-danger" data-history-back data-confirm="确定要取消编辑吗？" type='button'>取消编辑</button>
+        </div>
     </div>
-</div>
+
+</form>
 
 
 <script>
     require(['ckeditor'], function () {
         // 初始化编辑器
-        var editor = window.createEditor('[name=content]', {height: 500});
-
-        // 监听编辑器内容变化
-        if(editor) {
-            editor.on('change', function() {
-                // 更新预览内容
-                document.getElementById('preview-content').innerHTML = editor.getData();
-
-                // 处理代码块的语法高亮
-                handleCodeBlocks();
-            });
-
-            // 初始加载内容
-            setTimeout(function() {
-                document.getElementById('preview-content').innerHTML = editor.getData();
-                // 处理代码块的语法高亮
-                handleCodeBlocks();
-            }, 1000);
-        }
-
-        // 监听标题和描述变化
-        document.querySelector('[name=title]').addEventListener('input', function() {
-            document.getElementById('preview-title').innerText = this.value;
-        });
-
-        document.querySelector('[name=describe]').addEventListener('input', function() {
-            document.getElementById('preview-describe').innerText = this.value;
-        });
-
-        // 初始加载标题和描述
-        document.getElementById('preview-title').innerText = document.querySelector('[name=title]').value;
-        document.getElementById('preview-describe').innerText = document.querySelector('[name=describe]').value;
-
-        // 处理代码块函数
-        function handleCodeBlocks() {
-            // 确保预览区域中的代码块正确显示
-            var preElements = document.querySelectorAll('#preview-content pre');
-            preElements.forEach(function(preElement) {
-                // 确保代码块内的代码有正确的样式
-                if (!preElement.querySelector('code')) {
-                    var codeContent = preElement.innerHTML;
-                    preElement.innerHTML = '<code>' + codeContent + '</code>';
-                }
-
-                // 应用语法高亮
-                var codeElement = preElement.querySelector('code');
-                if (codeElement) {
-                    // 尝试从class中获取语言
-                    var langClass = Array.from(codeElement.classList).find(function(cls) {
-                        return cls.startsWith('language-');
-                    });
-                    
-                    var language = langClass ? langClass.replace('language-', '') : '';
-                    
-                    // 应用高亮
-                    if (window.hljs) {
-                        if (language) {
-                            hljs.highlightElement(codeElement);
-                        } else {
-                            hljs.highlightAuto(codeElement);
-                        }
-                    }
-                }
-
-                // 防止代码块内容溢出
-                preElement.style.overflow = 'auto';
-                preElement.style.maxWidth = '100%';
-            });
-        }
-        
-        // 动态加载highlight.js
-        if (!window.hljs) {
-            var script = document.createElement('script');
-            // 使用不同的CDN或备用链接
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js';
-            // 添加错误处理
-            script.onerror = function() {
-                // 如果CDN加载失败，尝试使用另一个CDN
-                console.log('Failed to load highlight.js from primary CDN, trying alternative...');
-                var backupScript = document.createElement('script');
-                backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js';
-                backupScript.onload = function() {
-                    if (editor) {
-                        handleCodeBlocks();
-                    }
-                };
-                document.head.appendChild(backupScript);
-            };
-            script.onload = function() {
-                // 加载完成后重新处理代码块
-                if (editor) {
-                    handleCodeBlocks();
-                }
-            };
-            document.head.appendChild(script);
-        }
+        window.createEditor('[name=content]', {height: 500});
     });
 </script>
 {/block}
