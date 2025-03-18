@@ -14,7 +14,7 @@
     <div class="layui-card-body">
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs2 text-center padding-top-15">
-                <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500" name="cover" value="{$vo.cover|default=''}">
+                <input type="hidden" name="cover" value="{$vo.cover|default=''}">
                 <script>$('[name=cover]').uploadOneImage();</script>
             </div>
             <div class="layui-col-xs10">
