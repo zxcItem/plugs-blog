@@ -215,6 +215,7 @@ class InstallBlog extends Migrator
         PhinxExtend::upgrade($table, [
             ['ip', 'string', ['limit' => 64,'default' => null, 'null' => true, 'comment' => 'IP地址']],
             ['user_agent', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => 'user_agent']],
+            ['type', 'string', ['limit' => 32,'default' => 'view', 'null' => true, 'comment' => '类型：view(浏览),like(点赞)']],
             ['code', 'string', ['limit' => 255,'default' => null, 'null' => true, 'comment' => '描述']],
             ['create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间']],
         ], [

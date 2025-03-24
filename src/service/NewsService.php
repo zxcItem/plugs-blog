@@ -245,4 +245,23 @@ class NewsService extends Service
     {
         return PluginBlogMark::mk()->where('status',1)->field('title,sign')->select()->toArray();
     }
+
+    /**
+     * 文章点赞
+     * @param array $map
+     * @return array|mixed|\think\admin\helper\QueryHelper|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public static function like(array $map)
+    {
+        $content = PluginBlogContent::mQuery()
+            ->where($map)
+            ->find();
+        if (!$content) return false;
+        PluginBlogContent::mQuery()->where($map)->inc('likes')->update();
+        PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'code'=>$map['code'],'type'=>'like']);
+        return true;
+    }
 }
