@@ -102,9 +102,9 @@ class NewsService extends Service
         $map = [];
         if (input('series')) $map = [['series','=',input('series')]];
         if (input('mark')) $map = [['mark','like','%'.input('mark').'%']];
-        $query = PluginBlogContent::mQuery()->like('title,series')->equal('code');
-        $query = $query->where(['status' => 1])
-            ->where($map)
+        $query = PluginBlogContent::mQuery()->where(['status' => 1])
+            ->where($map);
+        $query = $query->like('title#keyword,series')->equal('code')
             ->field('title,code,cover,describe,update_at,views,likes,mark')
             ->order(input('sort','top desc,sort desc,update_at desc'))
             ->page(true, false, false, 5);
