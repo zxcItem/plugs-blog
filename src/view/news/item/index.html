@@ -99,7 +99,7 @@
                 },
                 {
                     title: '标签分类',  minWidth: 150, templet: function (d) {
-                        let tpls = '集合：' + (d.type.title ?? '-');
+                        let tpls = '分类：' + (d.type.title ?? '-');
                         return tpls + '<br>标签：' + (d.mark.length > 0 ? d.mark.join('、') : '-');
                     }
                 },
