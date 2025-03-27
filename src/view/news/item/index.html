@@ -47,7 +47,7 @@
                 {
                     field: 'title', title: '商品名称', minWidth: 220, sort: true, templet: function (d) {
                         d.html = showTableImage(d.cover, false, 'sm')
-                        d.showPayments = "{:url('plugin-blog/content.item/show')}"
+                        d.showPayments = "{:url('news.item/show')}"
                         return laytpl("<div class='flex'><div>{{-d.html}}</div>" +
                             "<a class='color-text' data-area = \"['1000px','800px']\" data-modal=\"{{d.showPayments}}?id={{d.id}}\">" +
                             "<div class='ta-pl-10 nowrap'>标题：{{d.title}}" +
