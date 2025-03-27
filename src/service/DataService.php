@@ -4,8 +4,8 @@ declare (strict_types=1);
 
 namespace plugin\blog\service;
 
-use plugin\blog\model\PluginBlogContent;
-use plugin\blog\model\PluginBlogMark;
+use plugin\blog\model\PluginBlogNews;
+use plugin\blog\model\PluginBlogNewsMark;
 use think\admin\Service;
 
 /**
@@ -39,7 +39,7 @@ class DataService extends Service
         // 缓存键
         $ckey = 'PluginContentMarkItems';
         // 获取缓存中的标签项
-        $items = sysvar($ckey) ?: sysvar($ckey, PluginBlogMark::items());
+        $items = sysvar($ckey) ?: sysvar($ckey, PluginBlogNewsMark::items());
         // 空值处理
         if (empty($mark) || $mark === ',') {
             return [];
@@ -56,12 +56,18 @@ class DataService extends Service
         ));
     }
 
+    /**
+     * 获取统计信息
+     * @return array|mixed|null
+     * @throws \think\admin\Exception
+     * @throws \think\db\exception\DbException
+     */
     public static function getAuthor()
     {
         $author = ConfigService::get();
-        $author['newsCount'] = PluginBlogContent::mk()->cache(true, 60)->count();
-        $author['viewsCount'] = PluginBlogContent::mk()->cache(true, 60)->sum('views');
-        $author['likesCount'] = PluginBlogContent::mk()->cache(true, 60)->sum('likes');
+        $author['newsCount'] = PluginBlogNews::mk()->cache(true, 60)->count();
+        $author['viewsCount'] = PluginBlogNews::mk()->cache(true, 60)->sum('views');
+        $author['likesCount'] = PluginBlogNews::mk()->cache(true, 60)->sum('likes');
         return $author;
     }
 

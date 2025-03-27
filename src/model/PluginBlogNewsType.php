@@ -5,11 +5,11 @@ declare (strict_types=1);
 namespace plugin\blog\model;
 
 /**
- * 内容集合模型
- * @class PluginBlogSeries
+ * 文章分类模型
+ * @class PluginBlogNewsType
  * @package plugin\blog\model
  */
-class PluginBlogSeries extends Abs
+class PluginBlogNewsType extends Abs
 {
 
     public static function get()
@@ -19,11 +19,11 @@ class PluginBlogSeries extends Abs
 
     public function news()
     {
-        return $this->belongsTo(PluginBlogContent::class,'sign','series');
+        return $this->belongsTo(PluginBlogNews::class,'sign','type');
     }
 
     public function list()
     {
-        return $this->hasMany(PluginBlogContent::class,'series','sign');
+        return $this->hasMany(PluginBlogNews::class,'type','sign');
     }
 }

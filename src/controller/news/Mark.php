@@ -2,23 +2,22 @@
 
 declare (strict_types=1);
 
-namespace plugin\blog\controller\base;
+namespace plugin\blog\controller\news;
 
-use plugin\blog\model\PluginBlogSeries;
+use plugin\blog\model\PluginBlogNewsMark;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 
-
 /**
- * 集合管理
- * Class Series
- * @package plugin\blog\controller\base
+ * 标签管理
+ * Class Mark
+ * @package plugin\blog\controller\news
  */
-class Series extends Controller
+class Mark extends Controller
 {
 
     /**
-     * 集合管理
+     * 标签管理
      * @return void
      * @auth true
      * @menu true
@@ -28,25 +27,11 @@ class Series extends Controller
      */
     public function index()
     {
-        PluginBlogSeries::mQuery()->layTable(function () {
-            $this->title = '集合管理';
+        PluginBlogNewsMark::mQuery()->layTable(function () {
+            $this->title = '标签管理';
         }, function (QueryHelper $query) {
             $query->like('title')->dateBetween('create_at');
         });
-    }
-
-    /**
-     * 集合选择器
-     * @login true
-     * @return void
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function select()
-    {
-        $this->get['status'] = 1;
-        $this->index();
     }
 
     /**
@@ -55,7 +40,7 @@ class Series extends Controller
      */
     public function add()
     {
-        PluginBlogSeries::mForm('form');
+        PluginBlogNewsMark::mForm('form');
     }
 
     /**
@@ -64,7 +49,7 @@ class Series extends Controller
      */
     public function edit()
     {
-        PluginBlogSeries::mForm('form');
+        PluginBlogNewsMark::mForm('form');
     }
 
     /**
@@ -73,7 +58,7 @@ class Series extends Controller
      */
     public function state()
     {
-        PluginBlogSeries::mSave($this->_vali([
+        PluginBlogNewsMark::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -85,6 +70,6 @@ class Series extends Controller
      */
     public function remove()
     {
-        PluginBlogSeries::mDelete();
+        PluginBlogNewsMark::mDelete();
     }
 }

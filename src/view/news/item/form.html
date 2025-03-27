@@ -33,12 +33,12 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs6">
                 <div class="layui-form-item">
-                    <label class="layui-form-label color-green">所属集合</label>
+                    <label class="layui-form-label color-green">所属分类</label>
                     <div class="layui-input-block">
-                        <select class="layui-select" name="series">
+                        <select class="layui-select" name="type">
                             <option selected value="">------------无-----------</option>
-                            {foreach $serice as $k=>$v}
-                            {if isset($vo.series) and $vo.series eq $k}
+                            {foreach $types as $k=>$v}
+                            {if isset($vo.type) and $vo.type eq $k}
                             <option selected value="{$k}">{$v}</option>
                             {else}
                             <option value="{$k}">{$v}</option>

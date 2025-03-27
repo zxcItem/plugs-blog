@@ -6,13 +6,13 @@ namespace plugin\blog\service;
 
 use plugin\blog\model\PluginBlogAd;
 use plugin\blog\model\PluginBlogBanner;
-use plugin\blog\model\PluginBlogContent;
-use plugin\blog\model\PluginBlogMark;
+use plugin\blog\model\PluginBlogNews;
+use plugin\blog\model\PluginBlogNewsMark;
 use plugin\blog\model\PluginBlogNavigation;
+use plugin\blog\model\PluginBlogNewsComment;
 use plugin\blog\model\PluginBlogRecord;
-use plugin\blog\model\PluginBlogSeries;
+use plugin\blog\model\PluginBlogNewsType;
 use think\admin\Service;
-use think\facade\Db;
 
 /**
  * 文章
@@ -100,11 +100,11 @@ class NewsService extends Service
     public static function getNewsList()
     {
         $map = [];
-        if (input('series')) $map = [['series','=',input('series')]];
+        if (input('type')) $map = [['type','=',input('type')]];
         if (input('mark')) $map = [['mark','like','%'.input('mark').'%']];
-        $query = PluginBlogContent::mQuery()->where(['status' => 1])
+        $query = PluginBlogNews::mQuery()->where(['status' => 1])
             ->where($map);
-        $query = $query->like('title#keyword,series')->equal('code')
+        $query = $query->like('title#keyword,type')->equal('code')
             ->field('title,code,cover,describe,update_at,views,likes,mark')
             ->order(input('sort','top desc,sort desc,update_at desc'))
             ->page(true, false, false, 5);
@@ -128,7 +128,7 @@ class NewsService extends Service
         if ($string == 'recommend'){
             $map = ['status' => 1,'recommend'=>1];$order = 'recommend desc,views desc,sort desc';
         }
-        return PluginBlogContent::mQuery()->where($map)
+        return PluginBlogNews::mQuery()->where($map)
             ->field('title,code,cover,views')
             ->order($order)
             ->limit(6)
@@ -136,7 +136,7 @@ class NewsService extends Service
     }
 
     /**
-     * 获取集合详情
+     * 获取分类详情
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -144,41 +144,41 @@ class NewsService extends Service
      */
     public static function getServiceNews()
     {
-        return PluginBlogSeries::mk()
-            ->where('sign',input('series'))
+        return PluginBlogNewsType::mk()
+            ->where('sign',input('type'))
             ->withCount('news')
             ->find()->toArray();
     }
 
     /**
-     * 获取集合列表
+     * 获取分类列表
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public static function getIndexServices()
+    public static function getIndexTypes()
     {
-        return PluginBlogSeries::mk()
+        return PluginBlogNewsType::mk()
             ->where(['status'=>1,'is_show'=>1])
             ->with(['list'=>function($news){
-                $news->limit(5)->field('title,code,series,update_at');
+                $news->limit(5)->field('title,code,type,update_at');
             }])
             ->withCount('news')
             ->select()->toArray();
     }
 
     /**
-     * 获取集合内热门文章
-     * @param string $series
+     * 获取分类内热门文章
+     * @param string $type
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public static function getSeriesNewsList(string $series)
+    public static function getTypesNewsList(string $type)
     {
-        return PluginBlogContent::mQuery()->where(['status'=>1,'series'=>$series])
+        return PluginBlogNews::mQuery()->where(['status'=>1,'type'=>$type])
             ->field('title,code,cover,views')
             ->order('views desc')
             ->limit(6)
@@ -195,15 +195,15 @@ class NewsService extends Service
      */
     public static function getNewsInfo(array $map)
     {
-        $content = PluginBlogContent::mQuery()
+        $content = PluginBlogNews::mQuery()
             ->where($map)
-            ->field('title,cover,code, describe,keywords,series, views, content, mark, likes,comment, update_at')
+            ->field('title,cover,code, describe,keywords,type, views, content, mark, likes,comment, update_at')
             ->find();
         if ($content) {
             // 修改返回的内容
             $content = $content->toArray(); // 将查询结果转为数组
             $content['mark'] = DataService::markInfo($content['mark']);
-            PluginBlogContent::mQuery()->where($map)->inc('views')->update();
+            PluginBlogNews::mQuery()->where($map)->inc('views')->update();
             PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'code'=>$map['code']]);
         }
         return $content;
@@ -219,12 +219,12 @@ class NewsService extends Service
     public static function getMarkNews()
     {
         // 查询单个标签
-        $mark = PluginBlogMark::mk()
+        $mark = PluginBlogNewsMark::mk()
             ->where('sign', input('mark'))
             ->find();
         if ($mark) {
             // 统计包含该标签的文章数量
-            $mark['news_count'] = PluginBlogContent::mk()
+            $mark['news_count'] = PluginBlogNews::mk()
                 ->whereLike('mark', "%{$mark['sign']}%")
                 ->where('status', 1)
                 ->count();
@@ -243,7 +243,7 @@ class NewsService extends Service
      */
     public static function getMark()
     {
-        return PluginBlogMark::mk()->where('status',1)->field('title,sign')->select()->toArray();
+        return PluginBlogNewsMark::mk()->where('status',1)->field('title,sign')->select()->toArray();
     }
 
     /**
@@ -256,12 +256,23 @@ class NewsService extends Service
      */
     public static function like(array $map)
     {
-        $content = PluginBlogContent::mQuery()
+        $content = PluginBlogNews::mQuery()
             ->where($map)
             ->find();
         if (!$content) return false;
-        PluginBlogContent::mQuery()->where($map)->inc('likes')->update();
+        PluginBlogNews::mQuery()->where($map)->inc('likes')->update();
         PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'code'=>$map['code'],'type'=>'like']);
         return true;
+    }
+
+    /**
+     * 文章提交评论
+     * @param array $map
+     * @return bool
+     */
+    public static function comment(array $map)
+    {
+        $map['ip'] = $_SERVER['REMOTE_ADDR'];
+        return PluginBlogNewsComment::mk()->save($map);
     }
 }

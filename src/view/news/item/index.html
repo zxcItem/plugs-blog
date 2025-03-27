@@ -2,8 +2,16 @@
 
 {block name="button"}
 
+<!--{if auth("news.type/index")}-->
+<button class='layui-btn layui-btn-sm layui-btn-primary' data-modal='{:url("news.type/index")}' data-width="999px">分类管理</button>
+<!--{/if}-->
+
+<!--{if auth("news.mark/index")}-->
+<button class='layui-btn layui-btn-sm layui-btn-primary' data-modal='{:url("news.mark/index")}' data-width="999px">标签管理</button>
+<!--{/if}-->
+
 <!--{if auth("add")}-->
-<button data-open='{:url("add")}' class='layui-btn layui-btn-sm layui-btn-primary'>添加文章内容</button>
+<button data-open='{:url("add")}' class='layui-btn layui-btn-sm layui-btn-primary'>添加文章</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
@@ -23,7 +31,7 @@
         {/if}{/foreach}
     </ul>
     <div class="layui-tab-content">
-        {include file='content/item/index_search'}
+        {include file='news/item/index_search'}
         <table id="ItemContentTable" data-line="2" data-url="{:request()->url()}" data-target-search="form.form-search"></table>
     </div>
 </div>
@@ -91,7 +99,7 @@
                 },
                 {
                     title: '标签分类',  minWidth: 150, templet: function (d) {
-                        let tpls = '集合：' + (d.series.title ?? '-');
+                        let tpls = '集合：' + (d.type.title ?? '-');
                         return tpls + '<br>标签：' + (d.mark.length > 0 ? d.mark.join('、') : '-');
                     }
                 },

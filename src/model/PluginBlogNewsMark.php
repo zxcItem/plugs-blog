@@ -7,10 +7,10 @@ namespace plugin\blog\model;
 
 /**
  * 标签云模型
- * @class PluginBlogMark
+ * @class PluginBlogNewsMark
  * @package plugin\blog\model
  */
-class PluginBlogMark extends Abs
+class PluginBlogNewsMark extends Abs
 {
 
     /**

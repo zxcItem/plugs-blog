@@ -1,4 +1,6 @@
-<form action="{:sysuri()}" autocomplete="off" class="layui-form layui-form-pane form-search" method="get" onsubmit="return false">
+<fieldset>
+    <legend>{:lang('条件搜索')}</legend>
+<form action="{:sysuri()}" id="TagsDataSearch" autocomplete="off" class="layui-form layui-form-pane form-search" method="get" onsubmit="return false">
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">标签标题</label>
         <label class="layui-input-inline">
@@ -16,4 +18,4 @@
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
-
+</fieldset>

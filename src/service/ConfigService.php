@@ -27,8 +27,8 @@ class ConfigService extends Service
     const rules = [
         '#'  => ['name' => '不跳转'],
         'LK' => ['name' => '自定义链接'],
-        'JH' => ['name' => '集合详情页','node' => 'plugin-blog/base.series/select'],
-        'WZ' => ['name' => '文章详情页', 'node' => 'plugin-blog/content.item/select'],
+        'JH' => ['name' => '文章分类页','node' => 'plugin-blog/news.type/select'],
+        'WZ' => ['name' => '文章详情页', 'node' => 'plugin-blog/news.item/select'],
     ];
 
     /**
@@ -37,8 +37,8 @@ class ConfigService extends Service
     const location = [
         'index_content_right'  => '首页内容侧边-多项',
         'index_content_bottom' => '首页文章底部-单项',
-        'content_info_right'   => '文章详情侧边-多项',
-        'content_info_bottom'  => '文章详情底部-单项',
+        'news_info_right'   => '文章详情侧边-多项',
+        'news_info_bottom'  => '文章详情底部-单项',
     ];
 
     /**

@@ -2,11 +2,11 @@
 
 declare (strict_types=1);
 
-namespace plugin\blog\controller\content;
+namespace plugin\blog\controller\news;
 
-use plugin\blog\model\PluginBlogContent;
-use plugin\blog\model\PluginBlogMark;
-use plugin\blog\model\PluginBlogSeries;
+use plugin\blog\model\PluginBlogNews;
+use plugin\blog\model\PluginBlogNewsMark;
+use plugin\blog\model\PluginBlogNewsType;
 use plugin\blog\service\DataService;
 use think\admin\Controller;
 use think\admin\extend\CodeExtend;
@@ -33,10 +33,10 @@ class Item extends Controller
     public function index()
     {
         $this->status = $this->request->get('status', 1);
-        PluginBlogContent::mQuery()->layTable(function () {
+        PluginBlogNews::mQuery()->layTable(function () {
             $this->title = '文章内容管理';
         }, function (QueryHelper $query) {
-            $query->with(['series'])->equal('status')->like('title,code')->dateBetween('create_at');
+            $query->with(['type'])->equal('status')->like('title,code')->dateBetween('create_at');
         });
     }
 
@@ -71,7 +71,7 @@ class Item extends Controller
     public function add()
     {
         $this->title = '添加文章内容';
-        PluginBlogContent::mForm('form');
+        PluginBlogNews::mForm('form');
     }
 
     /**
@@ -81,7 +81,7 @@ class Item extends Controller
     public function edit()
     {
         $this->title = '编辑文章内容';
-        PluginBlogContent::mForm('form');
+        PluginBlogNews::mForm('form');
     }
 
     /**
@@ -97,9 +97,9 @@ class Item extends Controller
             $data['code'] = CodeExtend::uniqidNumber(10, 'A');
         }
         if ($this->request->isGet()) {
-            $model = PluginBlogMark::mk()->where(['status' => 1]);
+            $model = PluginBlogNewsMark::mk()->where(['status' => 1]);
             $this->marks = $model->order('sort desc,id desc')->select()->toArray();
-            $this->serice = PluginBlogSeries::get();
+            $this->types = PluginBlogNewsType::get();
             $data['mark'] = str2arr($data['mark'] ?? '');
         } else {
             $data['mark'] = arr2str($data['mark'] ?? []);
@@ -125,7 +125,7 @@ class Item extends Controller
      */
     public function state()
     {
-        PluginBlogContent::mSave($this->_vali([
+        PluginBlogNews::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -137,12 +137,15 @@ class Item extends Controller
      */
     public function remove()
     {
-        PluginBlogContent::mDelete();
+        PluginBlogNews::mDelete();
     }
 
+    /**
+     * 预览文章内容
+     */
     public function show()
     {
         $this->title = '预览文章内容';
-        PluginBlogContent::mForm('show');
+        PluginBlogNews::mForm('show');
     }
 }

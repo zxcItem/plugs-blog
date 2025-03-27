@@ -1,0 +1,36 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form-pane layui-tab layui-form layui-card">
+    <div class="layui-card-body padding-left-40">
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">评论信息</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="layui-form-label color-green">用户昵称</label>
+                    <div class="layui-input-block">
+                        <input value="{$vo.nickname|default=''}" readonly class="layui-input layui-bg-gray">
+                    </div>
+                </div>
+                <div class="layui-col-xs12">
+                    <label class="layui-form-label color-green">用户邮箱</label>
+                    <div class="layui-input-block">
+                        <input value="{$vo.email|default=''}" readonly class="layui-input layui-bg-gray">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label color-green">评论内容</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea layui-bg-gray" readonly>{$vo.content|default=""}</textarea>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>

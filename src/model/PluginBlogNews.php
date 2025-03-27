@@ -6,18 +6,18 @@ namespace plugin\blog\model;
 
 /**
  * 文章内容模型
- * @class PluginBlogContent
+ * @class PluginBlogNews
  * @package plugin\blog\model
  */
-class PluginBlogContent extends Abs
+class PluginBlogNews extends Abs
 {
 
     /**
-     * 管理集合信息
+     * 管理分类信息
      * @return \think\model\relation\BelongsTo
      */
-    public function series()
+    public function type()
     {
-        return $this->belongsTo(PluginBlogSeries::class,'series','sign');
+        return $this->belongsTo(PluginBlogNewsType::class,'type','sign');
     }
 }

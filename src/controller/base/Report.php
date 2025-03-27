@@ -4,10 +4,10 @@ declare (strict_types=1);
 
 namespace plugin\blog\controller\base;
 
-use plugin\blog\model\PluginBlogContent;
-use plugin\blog\model\PluginBlogMark;
+use plugin\blog\model\PluginBlogNews;
+use plugin\blog\model\PluginBlogNewsMark;
 use plugin\blog\model\PluginBlogRecord;
-use plugin\blog\model\PluginBlogSeries;
+use plugin\blog\model\PluginBlogNewsType;
 use plugin\blog\service\ConfigService;
 use think\admin\Controller;
 use think\Model;
@@ -29,9 +29,9 @@ class Report extends Controller
     {
         $this->title = '统计数据';
         $this->data = ConfigService::get();
-        $this->ContentTotal = PluginBlogContent::mk()->cache(true, 60)->count();
-        $this->SeriesTotal = PluginBlogSeries::mk()->cache(true, 60)->count();
-        $this->MarkTotal = PluginBlogMark::mk()->cache(true, 60)->count();
+        $this->ContentTotal = PluginBlogNews::mk()->cache(true, 60)->count();
+        $this->SeriesTotal = PluginBlogNewsType::mk()->cache(true, 60)->count();
+        $this->MarkTotal = PluginBlogNewsMark::mk()->cache(true, 60)->count();
         $this->RecordTotal = PluginBlogRecord::mk()->cache(true, 60)->count();
         // 近十天的用户及交易趋势
         if (empty($this->days = $this->app->cache->get('plugin.blog.portals', []))) {
@@ -51,10 +51,10 @@ class Report extends Controller
             }
             $this->app->cache->set('plugin.blog.portals', $this->days, 60);
         }
-        // 会员级别分布统计
-        $levels = PluginBlogSeries::mk()->where(['status' => 1])->column('sign code,title,0 count', 'sign');
-        foreach (PluginBlogContent::mk()->field('count(1) count,series')->group('series')->cursor() as $vo) {
-            $levels[$vo['series']]['count'] = isset($levels[$vo['series']]) ? $vo['count'] : 0;
+        // 文章分类统计
+        $levels = PluginBlogNewsType::mk()->where(['status' => 1])->column('sign code,title,0 count', 'sign');
+        foreach (PluginBlogNews::mk()->field('count(1) count,type')->group('type')->cursor() as $vo) {
+            $levels[$vo['type']]['count'] = isset($levels[$vo['type']]) ? $vo['count'] : 0;
         }
         $this->levels = array_values($levels);
         $this->fetch();

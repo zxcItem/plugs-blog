@@ -48,8 +48,6 @@ class Service extends Plugin
                 'subs' => [
                     ['name' => '应用参数配置', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.config/index"],
                     ['name' => '统计数据管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.report/index"],
-                    ['name' => '标签信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.mark/index"],
-                    ['name' => '集合信息管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.series/index"],
                     ['name' => '首页轮播管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.banner/index"],
                     ['name' => '首页导航管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.nav/index"],
                     ['name' => '网页广告信息', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/base.ad/index"],
@@ -58,7 +56,8 @@ class Service extends Plugin
             [
                 'name' => '文章管理',
                 'subs' => [
-                    ['name' => '文章内容管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/content.item/index"],
+                    ['name' => '文章内容管理', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/news.item/index"],
+                    ['name' => '文章内容评论', 'icon' => 'layui-icon layui-icon-read', 'node' => "{$code}/news.comment/index"],
                 ],
             ]
         ];

@@ -2,23 +2,23 @@
 
 declare (strict_types=1);
 
-namespace plugin\blog\controller\base;
+namespace plugin\blog\controller\news;
 
-use plugin\blog\model\PluginBlogMark;
+use plugin\blog\model\PluginBlogNewsType;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 
 
 /**
- * 标签云管理
- * Class Mark
- * @package plugin\blog\controller\base
+ * 分类管理
+ * Class Type
+ * @package plugin\blog\controller\news
  */
-class Mark extends Controller
+class Type extends Controller
 {
 
     /**
-     * 标签云管理
+     * 分类管理
      * @return void
      * @auth true
      * @menu true
@@ -28,11 +28,25 @@ class Mark extends Controller
      */
     public function index()
     {
-        PluginBlogMark::mQuery()->layTable(function () {
-            $this->title = '标签云管理';
+        PluginBlogNewsType::mQuery()->layTable(function () {
+            $this->title = '分类管理';
         }, function (QueryHelper $query) {
             $query->like('title')->dateBetween('create_at');
         });
+    }
+
+    /**
+     * 文章分类选择器
+     * @login true
+     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function select()
+    {
+        $this->get['status'] = 1;
+        $this->index();
     }
 
     /**
@@ -41,7 +55,7 @@ class Mark extends Controller
      */
     public function add()
     {
-        PluginBlogMark::mForm('form');
+        PluginBlogNewsType::mForm('form');
     }
 
     /**
@@ -50,7 +64,7 @@ class Mark extends Controller
      */
     public function edit()
     {
-        PluginBlogMark::mForm('form');
+        PluginBlogNewsType::mForm('form');
     }
 
     /**
@@ -59,7 +73,7 @@ class Mark extends Controller
      */
     public function state()
     {
-        PluginBlogMark::mSave($this->_vali([
+        PluginBlogNewsType::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -71,6 +85,6 @@ class Mark extends Controller
      */
     public function remove()
     {
-        PluginBlogMark::mDelete();
+        PluginBlogNewsType::mDelete();
     }
 }
