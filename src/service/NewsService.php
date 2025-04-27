@@ -204,7 +204,7 @@ class NewsService extends Service
             $content = $content->toArray(); // 将查询结果转为数组
             $content['mark'] = DataService::markInfo($content['mark']);
             PluginBlogNews::mQuery()->where($map)->inc('views')->update();
-            PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'user_agent'=>$_SERVER['HTTP_USER_AGENT'],'code'=>$map['code']]);
+            PluginBlogRecord::mk()->save(['ip'=>$_SERVER['REMOTE_ADDR'],'code'=>$map['code']]);
         }
         return $content;
     }
